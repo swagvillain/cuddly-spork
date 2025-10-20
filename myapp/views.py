@@ -9,3 +9,5 @@ def mainmenu(request):
 def index(request):
     return render(request, 'myapp/welcome-page.html')
 
+def game(request):
+    return render(request, 'myapp/game.html')

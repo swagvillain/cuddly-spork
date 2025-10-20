@@ -1,17 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Welcome</title>
-</head>
-<body>
-  <h1>Hello from welcome-page.html</h1>
-
-  <button
-  	class="btn btn-primary"
-        onclick="window.location.href='{% url 'mainmenu' %}';"
-  >
-  Main Menu
+<!DOCTYPE html> 
+<html lang="en"> 
+  <head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+    <title>Epic Math Race</title> 
+    <link rel="stylesheet" href="./style.css"> 
+    <link rel="icon" href="./favicon.ico" type="image/x-icon"> 
+  </head> 
+  <body> 
+    <main> 
+        <h1>Welcome to Epic Math Race</h1> 
+ 	  <button
+  	    class="btn btn-primary"
+            onclick="window.location.href='{% url 'mainmenu' %}';"
+ 	   >
+Main Menu 
   </button>
-</body>
+    </main> 
+    <!-- script src="index.js"></script --> 
+  </body> 
 </html>
+
+
+
+
 

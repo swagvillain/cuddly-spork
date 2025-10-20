@@ -10,26 +10,30 @@
   </head>
   <body>
     <main>
-        <h1>Main Menu</h1>
-	<ul>
-		<li> option 1</li>
-		<li> next option</li>
-	</ul>
-	<button
-		class="btn btn-primary"
-		onclick="window.location.href='{% url 'game' %}';"
-	>
-		Play Game!	
-	</button>
-	<button
-		class="btn btn-primary"
-		onclick="window.location.href='{% url 'index' %}';"
-	>
-		Exit
-	</button>
+        <h1>Game Time</h1>  
+	<br>
+	Game content here...
+	<br>
+	<br>
+	and here too...
+	<br>
+	
+
+        <!-- button
+                class="btn btn-primary"
+                onclick="window.location.href='{% url 'mainmenu' %}';"
+        >
+	Pause/menu
+        </button -->
+
+        <button
+                class="btn btn-primary"
+                onclick="window.location.href='{% url 'mainmenu' %}';"
+        >
+	Exit to Main Menu
+        </button>
     </main>
     <!-- script src="index.js"></script -->
   </body>
 </html>
-
 
