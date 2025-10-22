@@ -1,4 +1,6 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
+{% load static %}
+
 <html lang="en"> 
   <head> 
     <meta charset="UTF-8"> 
@@ -19,27 +21,12 @@
 	Main Menu
 	</button>
 
-<button id="speak-btn">Speak</button>
+	<button id="speak-btn">Speak</button>
+	<button onclick="speak('It\'s working. I\'m alive')">does it work?</button>
 
-<script>
-document.getElementById("speak-btn").addEventListener("click", function() {
-    fetch("{% url 'ai_speech' %}", {
-        method: "POST",
-        headers: {
-            "X-CSRFToken": "{{ csrf_token }}",
-        },
-    })
-    .then(response => response.text())
-    .then(data => console.log(data));
-});
-</script>
-
+	<script src="{% static 'js/tts.js' %}"></script>
     </main> 
     <!-- script src="index.js"></script --> 
   </body> 
 </html>
-
-
-
-
 
