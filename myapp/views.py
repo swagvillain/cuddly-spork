@@ -1,5 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+import pyttsx3
+
+robot = pyttsx3.init()
+
+# util functions here
+
+def ai_says(command):
+    robot.say("cool it works. I am speaking.")
+    robot.runAndWait()
+    return
+
 
 # Create your views here.
 
@@ -11,3 +22,7 @@ def index(request):
 
 def game(request):
     return render(request, 'myapp/game.html')
+
+def ai_speech(request):
+    ai_says(request)
+    return HttpResponse("ok")

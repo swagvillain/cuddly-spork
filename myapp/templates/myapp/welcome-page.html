@@ -6,17 +6,34 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
     <title>Epic Math Race</title> 
     <link rel="stylesheet" href="./style.css"> 
-    <link rel="icon" href="./favicon.ico" type="image/x-icon"> 
-  </head> 
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+  </head>
+
   <body> 
     <main> 
         <h1>Welcome to Epic Math Race</h1> 
- 	  <button
-  	    class="btn btn-primary"
-            onclick="window.location.href='{% url 'mainmenu' %}';"
- 	   >
-Main Menu 
-  </button>
+ 	<button
+  	  class="btn btn-primary"
+          onclick="window.location.href='{% url 'mainmenu' %}';"
+ 	>
+	Main Menu
+	</button>
+
+<button id="speak-btn">Speak</button>
+
+<script>
+document.getElementById("speak-btn").addEventListener("click", function() {
+    fetch("{% url 'ai_speech' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+    })
+    .then(response => response.text())
+    .then(data => console.log(data));
+});
+</script>
+
     </main> 
     <!-- script src="index.js"></script --> 
   </body> 

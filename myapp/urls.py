@@ -6,4 +6,5 @@ urlpatterns = [
         path("", views.index, name="index"),
         path('mainmenu', views.mainmenu, name='mainmenu'),
         path('game', views.game, name='game'),
+        path('ai_speech/', views.ai_speech, name='ai_speech'),
         ]
