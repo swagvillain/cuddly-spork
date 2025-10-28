@@ -6,12 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Epic Math Race</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'style.css'  %}">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 
     <style>
-body {font-family: Arial, Helvetica, sans-serif;}
-
+	body{
+            background-image: url("{% static 'spelling-background.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+	}
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -54,12 +60,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
   </head>
   <body>
     <main>
-        <h1>Main Menu</h1>
+      <div class="transparent-background">
+        <h1 style="color:yellow">Main Menu</h1>
+	<p style="color:red"><em><b>The bestest most funnest spelling game ever!</b></em></p>
 	<ul>
 		<li>
 			<button
 				class="btn btn-primary"
 				onclick="window.location.href='{% url 'game' %}';"
+				onmouseover="speak('Play the Game!')"
 			>
 			Play Game!	
 			</button>
@@ -68,7 +77,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			<button
 				id="rulesButton"
 				class="btn btn-primary"
-				onclick=""
 			>
 			Rules
 			</button>
@@ -77,11 +85,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			<button
 				class="btn btn-primary"
 				onclick="window.location.href='{% url 'index' %}';"
+				onmouseover="speak('Exit game.')"
 			>
 			Exit
 			</button>
 		</li>
 	</ul>
+      </div>
     </main>
 
 	<!-- The Modal -->
@@ -94,20 +104,24 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	  </div>
 	</div>
 
+    <!-- Modal Script -->
     <script>
 	// Get the modal
 	var modal = document.getElementById("Rules");
 
 	// Get the button that opens the modal
 	var btn = document.getElementById("rulesButton");
+	btn.addEventListener('mouseover', () => {
+		speak('See rules.');
+	});
 
 	// Get the <span> element that closes the modal
 	var span = document.getElementsByClassName("close")[0];
 
 	// When the user clicks the button, open the modal
-	btn.onclick = function() {
+	btn.addEventListener('click', () => {
 	  modal.style.display = "block";
-	}
+	});
 
 	// When the user clicks on <span> (x), close the modal
 	span.onclick = function() {
@@ -120,7 +134,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	    modal.style.display = "none";
 	  }
 	}
-</script>
+    </script>
+
+    <!-- TTS script -->
+    <script src="{% static 'js/tts.js' %}"></script>
+    
   </body>
 </html>
 

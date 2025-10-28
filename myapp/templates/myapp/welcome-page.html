@@ -2,6 +2,7 @@
 {% load static %}
 
 <html lang="en"> 
+	<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
   <head> 
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -11,25 +12,32 @@
     <link rel="stylesheet" href="{% static 'style.css'  %}">
     <style>
 	body {
-            background-image: url("{% static 'welcome-background.jpg' %}");
-            background-size: contain;
+            background-image: url("{% static 'spelling-background.jpg' %}");
+            background-size: cover;
 	    background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
+	    font-family: 'Comic Neue', sans-serif;
         }
+	h1 {
+    font-family: "Comic Neue", cursive ;
+  }
     </style>
   </head>
 
   <body> 
     <main> 
-        <h1>Welcome to Epic Math Race</h1> 
+	    <div class="transparent-background">
+
+
+        <h1 style="color:yellow">Welcome to Go Ghoti</h1> 
  	<button
   	  class="btn btn-primary"
           onclick="navigateToMainMenu()"
  	>
 	Continue to Main Menu
 	</button>
-	
+	    </div>	
 	<script src="{% static 'js/tts.js' %}"></script>
     </main> 
     <!-- script src="index.js"></script --> 
