@@ -25,10 +25,9 @@
     </style>
   </head>
 
-  <body> 
+  <body onload="speak('Welcome to the Game! I am your robot companion and best friend. Click the button to continue!')"> 
     <main> 
 	    <div class="transparent-background">
-
 
         <h1 style="color:yellow">Welcome to Go Ghoti</h1> 
  	<button
@@ -40,7 +39,11 @@
 	    </div>	
 	<script src="{% static 'js/tts.js' %}"></script>
     </main> 
-    <!-- script src="index.js"></script --> 
+    
+    <!-- TTS script -->
+    <script src="{% static 'js/tts.js' %}"></script>
+
+    <!-- Navigation script -->
     <script>
     	function navigateToMainMenu(){
 		window.location.href='{% url 'mainmenu' %}';
