@@ -39,7 +39,7 @@
 		    <td>{{ forloop.counter }}</td>
 		    <td>{{ item.player.player_name }}</td>
 		    <td>{{ item.score }}</td>
-		    <td>{{ item.timestamp }}</td>
+		    <td>{{ item.timestamp|date:"Y-m-d" }}</td>
 	    </tr>
 	    {% empty %}
 	    <tr>
