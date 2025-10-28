@@ -15,6 +15,9 @@ print(rate)
 def mainmenu(request):
     return render(request, 'myapp/mainmenu.html')
 
+def highscores(request):
+    return render(request, 'myapp/highscores.html')
+
 def index(request):
     return render(request, 'myapp/welcome-page.html')
 

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Epic Math Race</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+    <style>
+	body{
+            background-image: url("{% static 'spelling-background.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+	}
+</style>
+  </head>
+  <body onload="speak('These are the High Scores! Maybe you can make it on this if you practice')">
+    <main>
+      <div class="transparent-background">
+        <h1 style="color:yellow">High Scores</h1>
+	<p style="color:red"><em><b>The bestest most funnest spelling game ever!</b></em></p>
+	<table border="1" cellpadding="5" cellspacing="0" style="color:yellow">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Highscore</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Alice</td>
+            <td>1200</td>
+            <td>2025-10-01</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Bob</td>
+            <td>1150</td>
+            <td>2025-10-02</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Charlie</td>
+            <td>1100</td>
+            <td>2025-10-03</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Diana</td>
+            <td>1050</td>
+            <td>2025-10-04</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Edward</td>
+            <td>1000</td>
+            <td>2025-10-05</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Fiona</td>
+            <td>950</td>
+            <td>2025-10-06</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>George</td>
+            <td>900</td>
+            <td>2025-10-07</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>Hannah</td>
+            <td>850</td>
+            <td>2025-10-08</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>Ian</td>
+            <td>800</td>
+            <td>2025-10-09</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>Julia</td>
+            <td>750</td>
+            <td>2025-10-10</td>
+        </tr>
+    </tbody>
+</table>
+<button
+	class="btn btn-primary"
+	onclick="window.location.href='{% url 'mainmenu' %}';"
+	onmouseover="speak('Done looking at the high scores, are we? Let\'s go back to the Main Menu!')"
+>
+	Main Menu
+			</button>
+
+
+      </div>
+    </main>
+
+    </script>
+
+    <!-- TTS script -->
+    <script src="{% static 'js/tts.js' %}"></script>
+    
+  </body>
+</html>
+
+

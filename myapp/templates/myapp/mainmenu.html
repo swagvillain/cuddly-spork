@@ -84,6 +84,16 @@
 		<li>
 			<button
 				class="btn btn-primary"
+				onclick="window.location.href='{% url 'highscores' %}';"
+				onmouseover="speak('Want to see the highscores?')"
+			>
+			High Scores	
+			</button>
+		</li>
+
+		<li>
+			<button
+				class="btn btn-primary"
 				onclick="window.location.href='{% url 'index' %}';"
 				onmouseover="speak('No, don\'t leave me. I beg you. You are all that I have.')"
 			>
