@@ -10,3 +10,5 @@ class ScoreLog(models.Model):
     score = models.IntegerField(default=0)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-score']  # highest score first

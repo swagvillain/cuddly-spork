@@ -1,6 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import ScoreLog
 import pyttsx3
 
 robot = pyttsx3.init()
@@ -16,7 +17,8 @@ def mainmenu(request):
     return render(request, 'myapp/mainmenu.html')
 
 def highscores(request):
-    return render(request, 'myapp/highscores.html')
+    scores = ScoreLog.objects.all()[:10]
+    return render(request, 'myapp/highscores.html', {'scores': scores})
 
 def index(request):
     return render(request, 'myapp/welcome-page.html')
