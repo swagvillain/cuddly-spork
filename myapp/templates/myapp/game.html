@@ -1,76 +1,79 @@
 <!DOCTYPE html>
 {% load static %}
-
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{% static 'style.css'  %}">
-    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
-    <title>Ghoti</title>
-    <!-- link rel="stylesheet" href="./style.css" -->
-    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 
-  <style>
+    <style>
     body, html {
         height: 100%;
         margin: 0;
-
+        overflow: hidden
     }
+
     .bg {
-        background-color:black;
+        background-image: url("{% static 'black_background.jpg' %}");
 
+        height: 100%;
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
+
+
+
     .redCar {
         height: 10px;
         width: 10px;
     }
+
+    .greenCar{
+        height: 10px;
+        width: 10px;
+    }
+
     .question_icon {
         height: 20px;
         width: 20px;
     }
+
     dialog {
         position: absolute;
         align-items: center;
         height: 100px;
     }
-    </style>
 
-  </head>
-  <body style="background-color:black" onload="speak('Here we go! it\'s on like Dankey Kang!')">
-    <main style="color:white;">
-	    <div class="bg">
-        <h1 style="text-align: center;">Race Time</h1>  
-	    <br>
-    <div id="info">
-       	<div class="score1" id="score1"> Player 1 Score: 0 </div>
-            <br>
-            <div class="score2" id="score2">Player 2 Score: 0</div>
-    	<br>
-            <div class="score3" id="score3">AI Player Score: 0</div>
+
+
     
 
-        <button
-                class="btn btn-primary"
-		onclick="speak('Sorry, this functionality is not yet available. Please try again at a later date.')"
-		onmouseover="speak('You want to pause the game?')"
-        >
-	Pause/menu
-        </button>
+    </style>
+ 
+    <title>Speed Racer</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body onload="speak('Let\'s go')">
 
-        <button
-                class="btn btn-primary"
-                onclick="window.location.href='{% url 'mainmenu' %}';"
-        >
-	Exit to Main Menu
-        </button>
-    </div>
+    <div class="bg">
 
-        <!-- dialog content -->
+        <main style="color:white;">
+        <h1 style="text-align: center;">Race Time</h1>  
+	<br>
+	<div class="score1" id="score1"> Player 1 Score: 0 </div>
+        <br>
+        <div class="score2" id="score2">Player 2 Score: 0</div>
+	<br>
+        <div class="score3" id="score3">AI Player Score: 0</div>
+
+
+        
         <dialog id = "dialog">
                 <center>
-                Answer The Math Problem!
+                <div id = "prompt"> Answer The Math Problem! </div>
 
                 <div id="math"> Math Question</div>
 
@@ -81,15 +84,48 @@
                 </center>
                 
         </dialog>
+
+
+        
+
+
+
+        <!-- button
+                class="btn btn-primary"
+                onclick="window.location.href='{% url 'mainmenu' %}';"
+        >
+	Pause/menu
+        </button -->
+
+        <br>
+        <button
+                class="btn btn-primary"
+                onclick="window.location.href='{% url 'mainmenu' %}';"
+        >
+	Exit to Main Menu
+        </button>
+    </main>
+    <!-- script src="index.js"></script -->
+     
+
+
+
     <div class = "question_icon"> <img id = question width = 35 src="{% static 'question.png' %}"> </img> </div>
 
     <div class = "redCar"> <img id = rcar width = 50 src="{% static 'RedCar.png' %}"> </img> </div>
-    </div>
-    </main>
-  </body>
 
-<script>
+    <div class = "greenCar"> <img id = gcar width = 50 src="{% static 'GreenCar.png' %}"> </img> </div>
+
+    
+
+
+    </div>
+
+    <script>
+
         let rcar = document.getElementById('rcar');
+        let gcar = document.getElementById('gcar');
+
         let speed = 10;
         let question = document.getElementById('question');
 
@@ -100,33 +136,197 @@
         let user_answer = document.getElementById("answer");
         let submit_button = document.getElementById("submit");
         let math = document.getElementById("math");
+        let prompt = document.getElementById("prompt");
 
 
         let car_border = rcar.getBoundingClientRect();
+        let gcar_border = gcar.getBoundingClientRect();
 
         let q_border = question.getBoundingClientRect();
         
         let dialog = document.getElementById("dialog");
+        //let gdialog = document.getElementById("dialog2");
         let box_open = false;
 
 
         window.addEventListener('load', () => {
                 rcar.style.position = 'absolute';
-                rcar.style.left = 100 + 'px';
-                rcar.style.top = 100 + 'px';
+                rcar.style.left = 1000 + 'px';
+                rcar.style.top = 600 + 'px';
                 rcar.style.transform = '';
+
+                gcar.style.position = 'absolute';
+                gcar.style.left = 400 + "px";
+                gcar.style.top = 600 + "px";
+                gcar.style.transform = '';
 
         
                 question.style.position = 'absolute';
-                question.style.top = 200 + 'px';
-                question.style.left = 200 + 'px';
+                question.style.top = 300 + 'px';
+                question.style.left = 700 + 'px';
                 question.style.padding = 0;
                 question.style.border = 0;
                 question.style.margin = 0;
         })
 
+
+        window.addEventListener('keyup', (e) => {
+
+                switch (e.key){
+                        case 'd':
+                                if(box_open == false){
+                                        gcar.style.left = parseInt(gcar.style.left) + speed + 'px';
+                                        gcar.style.transform = "rotate(90deg)";
+                                        gcar_border = gcar.getBoundingClientRect();
+                                        console.log(gcar_border)
+                                        q_border = question.getBoundingClientRect();
+                                        console.log(q_border)
+
+                                        if((!(gcar_border.left > q_border.right || gcar_border.right < q_border.left || gcar_border.bottom < q_border.top || gcar_border.top > q_border.bottom))){
+                                        
+                                        box_open = true;
+                                        math.textContent = RandInt() + "+" + RandInt();
+                                        console.log(math.textContent);
+                                        prompt.textContent = "Player 2 Answer The Math Problem!";
+                                        dialog.showModal();
+                                        
+
+
+
+                                        submit_button.addEventListener("click", () => {
+                                                console.log(user_answer);
+                                                dialog.close();
+                                                let answer_key = eval(math.textContent);
+
+                                                if(answer_key == user_answer.value){
+                                                        p2_score ++;
+                                                }
+                                                s2.textContent = "Player 2 Score: " + p2_score;
+                                                question.style.top = RandY() + 'px';
+                                                question.style.left = RandX() + 'px';
+                                                box_open = false;
+                                        });
+
+                                        
+                                }
+                                break;
+                                }
+                        
+                        case 'a':
+                                if(box_open == false){
+
+                                        gcar.style.left = parseInt(gcar.style.left) - speed + 'px';
+                                        gcar.style.transform = "rotate(-90deg)";
+                                        gcar_border = gcar.getBoundingClientRect();
+                                        console.log(gcar_border)
+                                        q_border = question.getBoundingClientRect();
+                                        console.log(q_border)
+
+                                        if(!(gcar_border.left > q_border.right || gcar_border.right < q_border.left || gcar_border.bottom < q_border.top || gcar_border.top > q_border.bottom)){
+                                        
+                                        box_open = true;
+                                        math.textContent = RandInt() + "+" + RandInt();
+                                        prompt.textContent = "Player 2 Answer The Math Problem!";
+                                        dialog.showModal();
+
+                                        submit_button.addEventListener("click", () => {
+                                                console.log(user_answer);
+                                                dialog.close();
+                                                let answer_key = eval(math.textContent);
+
+                                                if(answer_key == user_answer.value){
+                                                        p2_score ++;
+                                                }
+                                                s2.textContent = "Player 2 Score: " + p2_score;
+                                                question.style.top = RandY() + 'px';
+                                                question.style.left = RandX() + 'px';
+                                                box_open = false;
+                                        });
+
+                                }
+                                break;
+                                }
+                        case 'w':
+                                if(box_open == false){
+                                        gcar.style.top = parseInt(gcar.style.top) - speed + 'px';
+                                        gcar.style.transform = "rotate(0deg)";
+                                        gcar_border = gcar.getBoundingClientRect();
+                                        console.log(gcar_border)
+                                        q_border = question.getBoundingClientRect();
+                                        console.log(q_border)
+
+                                        if(!(gcar_border.left > q_border.right || gcar_border.right < q_border.left || gcar_border.bottom < q_border.top || gcar_border.top > q_border.bottom)){
+                                        
+                                        box_open = true;
+                                        math.textContent = RandInt() + "+" + RandInt();
+                                        prompt.textContent = " Player 2 Answer The Math Problem!";
+                                        dialog.showModal();
+						speak("Payer 2, answer the math problem");
+
+                                        submit_button.addEventListener("click", () => {
+                                                console.log(user_answer);
+                                                dialog.close();
+                                                let answer_key = eval(math.textContent);
+
+                                                if(answer_key == user_answer.value){
+							speak("good job!");
+                                                        p2_score ++;
+                                                }
+                                                s2.textContent = "Player 2 Score: " + p2_score;
+                                                question.style.top = RandY() + 'px';
+                                                question.style.left = RandX() + 'px';
+                                                box_open = false;
+                                        });
+
+                                }
+                                break;
+                                }
+
+                        case 's':
+                                if(box_open == false){
+
+                                        gcar.style.top = parseInt(gcar.style.top) + speed + 'px';
+                                        gcar.style.transform = "rotate(180deg)";
+                                        gcar_border = gcar.getBoundingClientRect();
+                                        console.log(gcar_border)
+                                        q_border = question.getBoundingClientRect();
+                                        console.log(q_border)
+
+                                        if(!(gcar_border.left > q_border.right || gcar_border.right < gq_border.left || gcar_border.bottom < q_border.top || gcar_border.top > q_border.bottom)){
+                                       
+                                        box_open = true;
+                                        math.textContent = RandInt() + "+" + RandInt();
+                                        prompt.textContent = "Player 2 Answer The Math Problem!";
+                                        dialog.showModal();
+					speak("Player 2, answer the math problem");
+
+                                        submit_button.addEventListener("click", () => {
+                                                console.log(user_answer);
+                                                dialog.close();
+                                                let answer_key = eval(math.textContent);
+
+                                                if(answer_key == user_answer.value){
+							speak("good job")
+                                                        p2_score ++;
+                                                }
+                                                s2.textContent = "Player 2 Score: " + p2_score;
+                                                question.style.top = RandY() + 'px';
+                                                question.style.left = RandX() + 'px';
+                                                box_open = false;
+                                        });
+
+                                }
+                                break;
+                                }
+                }
+        });
+
+
+
+
+
         
-        window.addEventListener('keydown', (e) => {
+        window.addEventListener('keyup', (e) => {
 
                 switch (e.key){
                         case 'ArrowRight':
@@ -142,6 +342,7 @@
                                         
                                         box_open = true;
                                         math.textContent = RandInt() + "+" + RandInt();
+                                        prompt.textContent = "Player 1 Answer The Math Problem!";
                                         dialog.showModal();
 
                                         submit_button.addEventListener("click", () => {
@@ -171,7 +372,28 @@
                                 q_border = question.getBoundingClientRect();
                                 console.log(q_border)
                                 if(!(car_border.left > q_border.right || car_border.right < q_border.left || car_border.bottom < q_border.top || car_border.top > q_border.bottom)){
+                                        
+                                        box_open = true;
+                                        math.textContent = RandInt() + "+" + RandInt();
+                                        prompt.textContent = "Player 1 Answer The Math Problem!";
                                         dialog.showModal();
+					speak("Player 1, answer the math problem");
+
+                                        submit_button.addEventListener("click", () => {
+                                                console.log(user_answer);
+                                                dialog.close();
+                                                let answer_key = eval(math.textContent);
+
+                                                if(answer_key == user_answer.value){
+							speak("good job player 1");
+                                                        p1_score ++;
+                                                }
+                                                s1.textContent = "Player 1 Score: " + p1_score;
+                                                question.style.top = RandY() + 'px';
+                                                question.style.left = RandX() + 'px';
+                                                box_open = false;
+                                        });
+
                                 }
                                 
                                 break;
@@ -185,7 +407,26 @@
                                 q_border = question.getBoundingClientRect();
                                 console.log(q_border)
                                 if(!(car_border.left > q_border.right || car_border.right < q_border.left || car_border.bottom < q_border.top || car_border.top > q_border.bottom)){
+                                        
+                                        box_open = true;
+                                        math.textContent = RandInt() + "+" + RandInt();
+                                        prompt.textContent = "Player 1 Answer The Math Problem!";
                                         dialog.showModal();
+
+                                        submit_button.addEventListener("click", () => {
+                                                console.log(user_answer);
+                                                dialog.close();
+                                                let answer_key = eval(math.textContent);
+
+                                                if(answer_key == user_answer.value){
+                                                        p1_score ++;
+                                                }
+                                                s1.textContent = "Player 1 Score: " + p1_score;
+                                                question.style.top = RandY() + 'px';
+                                                question.style.left = RandX() + 'px';
+                                                box_open = false;
+                                        });
+
                                 }
                                 break;
                                 }
@@ -198,31 +439,56 @@
                                 q_border = question.getBoundingClientRect();
                                 console.log(q_border)
                                 if(!(car_border.left > q_border.right || car_border.right < q_border.left || car_border.bottom < q_border.top || car_border.top > q_border.bottom)){
+                                       
+                                        box_open = true;
+                                        math.textContent = RandInt() + "+" + RandInt();
+                                        prompt.textContent = "Player 1 Answer The Math Problem!";
                                         dialog.showModal();
+					speak("Player 1, answer the math problem");
+
+                                        submit_button.addEventListener("click", () => {
+                                                console.log(user_answer);
+                                                dialog.close();
+                                                let answer_key = eval(math.textContent);
+
+                                                if(answer_key == user_answer.value){
+                                                        p1_score ++;
+                                                }
+                                                s1.textContent = "Player 1 Score: " + p1_score;
+                                                question.style.top = RandY() + 'px';
+                                                question.style.left = RandX() + 'px';
+                                                box_open = false;
+                                        });
+
                                 }
                                 break;
                                 }
 
                 }
 
-                function RandInt(){
+                
+
+        });
+
+        function RandInt(){
                         return Math.floor(Math.random() * 11);
                 }
 
-                function RandX(){
+        function RandX(){
                         return Math.floor(Math.random() * 1400)
-                }
+        }
 
-                function RandY(){
+        function RandY(){
                         return Math.floor(Math.random() * 650)
-                }
-
-        });
+        }
         
 
 
     </script>
 
-  <script src="{% static 'js/tts.js' %}"></script>
-</html>
+<script src="{% static 'js/tts.js' %}"></script>
+    
+    
+  </body>
 
+</html>
