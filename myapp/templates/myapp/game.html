@@ -217,12 +217,25 @@
 		var needGoDown = false;
 		var needGoLeft = false;
 		var needGoRight = false;
+		let q_border = question.getBoundingClientRect();
+		let q_bottom = q_border.bottom;
+		let q_top = q_border.top;
+		let b_border = bcar.getBoundingClientRect();
+		let b_bottom = b_border.bottom;
+		let b_top = b_border.top;
 		
 		var targetY = question.style.top;
 		var targetX = question.style.left;
 
 		var x = setInterval( function() {
-			if (parseInt(question.style.top) > parseInt(bcar.style.top)){
+			let q_border = question.getBoundingClientRect();
+			let q_bottom = q_border.bottom;
+			let q_top = q_border.top;
+			let b_border = bcar.getBoundingClientRect();
+			let b_bottom = b_border.bottom;
+			let b_top = b_border.top;
+			
+			if (parseInt(q_top) > parseInt(b_bottom)){
 				console.log("1");
 				if(box_open == false){
 					bcar.style.top = parseInt(bcar.style.top) + speed + 'px';
@@ -234,7 +247,7 @@
 						mathDialog(ai_player);
 					}
 				}
-			} else 	if (parseInt(question.style.top) < parseInt(bcar.style.top)){
+			} else 	if (parseInt(q_bottom) < parseInt(b_top)){
 				console.log("2");
 				if(box_open == false){
 					bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
