@@ -6,9 +6,6 @@ import pyttsx3
 
 robot = pyttsx3.init()
 robot.setProperty('rate', 150)
-rate = robot.getProperty('rate')
-robot.say('My current rate is ' + str(rate))
-print(rate)
 
 
 # views here.
