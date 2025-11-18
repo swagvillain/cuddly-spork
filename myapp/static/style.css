@@ -22,6 +22,27 @@ ul {
   padding: 0;
 }
 
+#main-countdown {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.score1 {
+  color: red;
+}
+
+.score2 {
+  color: green;
+}
+
+.score3 {
+  color: blue;
+}
+
 .transparent-background {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 20px;

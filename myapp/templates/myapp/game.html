@@ -13,6 +13,10 @@
         margin: 0;
         overflow: hidden
     }
+    
+    h1 {
+	    color: white;
+    }
 
     .bg {
         background-image: url("{% static 'black_background.jpg' %}");
@@ -57,14 +61,14 @@
 <!-- ******* BEGIN HTML/CONTENT ******** -->
  
     <title>Speed Racer</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   </head>
   <body onload="speak('Let\'s go')">
 
     <div class="bg">
 
-        <main style="color:white;">
+        <main>
         <h1 style="text-align: center;">Race Time</h1>  
 	<br>
 	<div class="score1" id="score1"> Player 1 Score: 0 </div>
@@ -80,7 +84,7 @@
 
                 <div id="math"> Math Question</div>
 
-                <input id = "answer" type="text" autofocus>
+		<input id="answer" type="text" autocomplete="off">
                 <br>
                 <br>
                 <button id="submit"> Submit Answer </button>
@@ -95,6 +99,8 @@
         >
 	Exit to Main Menu
         </button>
+
+        <p id="main-countdown"></p>
     </main>
 
     <div class = "question_icon"> <img id = question width = 35 src="{% static 'question.png' %}"> </img> </div>
@@ -104,6 +110,25 @@
     <div class = "car"> <img id = bcar width = 50 src="{% static 'BlueCar.png' %}"> </img> </div>
 
     </div>
+
+    <!-- Timer Script -->
+    <script>
+	    var mainTimerDuration = 60;
+	    var timeLeft;
+	
+	    function startMainTimer(){
+		timeLeft = mainTimerDuration;
+  	        var x = setInterval(function() {
+		    if(timeLeft < 1){
+		        clearInterval(x);
+			document.getElementById("main-countdown").innerHTML = "Game Over";
+		    } else {
+	     		document.getElementById("main-countdown").innerHTML = timeLeft;
+			timeLeft --;
+		    }
+	    }, 1000);
+	    }
+    </script>
 
     <script>
 
@@ -115,6 +140,8 @@
 	}
 
         let speed = 10;
+	let aiMoveFreq = 100; // time in ms between ai move
+	let aiCorrectRate = 100; // percentage of the time that ai guesses correctly
 
         let rcar = document.getElementById('rcar');
         let gcar = document.getElementById('gcar');
@@ -150,24 +177,32 @@
         //let gdialog = document.getElementById("dialog2");
         let box_open = false;
 
+	// initial locations of cars, q-box upon load
         window.addEventListener('load', () => {
                 rcar.style.position = 'absolute';
-                rcar.style.left = 1000 + 'px';
-                rcar.style.top = 600 + 'px';
-                rcar.style.transform = '';
+                rcar.style.left = 400 + 'px';
+                rcar.style.top = 200 + 'px';
+                rcar.style.transform = 'rotate(90deg)';
 
                 gcar.style.position = 'absolute';
                 gcar.style.left = 400 + "px";
                 gcar.style.top = 600 + "px";
-                gcar.style.transform = '';
+                gcar.style.transform = 'rotate(90deg)';
+
+		bcar.style.position = 'absolute';
+		bcar.style.left = 1000 + 'px';
+		bcar.style.top = 600 + 'px';
+		bcar.style.transform = 'rotate(270deg)';
 
                 question.style.position = 'absolute';
-                question.style.top = 300 + 'px';
+                question.style.top = 400 + 'px';
                 question.style.left = 700 + 'px';
                 question.style.padding = 0;
                 question.style.border = 0;
                 question.style.margin = 0;
-        })
+		startMainTimer();
+		moveAI();
+        });
 
 	// listener for enter key to submit answer
 	window.addEventListener('keyup', (e) => {
@@ -175,6 +210,70 @@
 			submit_button.click();
 		}
 	});
+
+	// ai movement
+	function moveAI(){
+		var needGoUp = false;
+		var needGoDown = false;
+		var needGoLeft = false;
+		var needGoRight = false;
+		
+		var targetY = question.style.top;
+		var targetX = question.style.left;
+
+		var x = setInterval( function() {
+			if (parseInt(question.style.top) > parseInt(bcar.style.top)){
+				console.log("1");
+				if(box_open == false){
+					bcar.style.top = parseInt(bcar.style.top) + speed + 'px';
+					bcar.style.transform = "rotate(180deg)";
+					bcar_border = bcar.getBoundingClientRect();
+					q_border = question.getBoundingClientRect();
+
+					if(isColliding(bcar_border, q_border)){
+						mathDialog(ai_player);
+					}
+				}
+			} else 	if (parseInt(question.style.top) < parseInt(bcar.style.top)){
+				console.log("2");
+				if(box_open == false){
+					bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
+					bcar.style.transform = "rotate(0deg)";
+					bcar_border = bcar.getBoundingClientRect();
+					q_border = question.getBoundingClientRect();
+
+					if(isColliding(bcar_border, q_border)){
+						mathDialog(ai_player);
+					}
+				}
+			} else 	if (parseInt(question.style.left) > parseInt(bcar.style.left)){
+					console.log("3");
+			if(box_open == false){
+					bcar.style.left = parseInt(bcar.style.left) + speed + 'px';
+					bcar.style.transform = "rotate(90deg)";
+					bcar_border = bcar.getBoundingClientRect();
+					q_border = question.getBoundingClientRect();
+
+					if(isColliding(bcar_border, q_border)){
+						mathDialog(ai_player);
+					}
+				}
+			} else	if (parseInt(question.style.left) < parseInt(bcar.style.left)){
+						console.log("4");
+		if(box_open == false){
+					bcar.style.left = parseInt(bcar.style.left) - speed + 'px';
+					bcar.style.transform = "rotate(270deg)";
+					bcar_border = bcar.getBoundingClientRect();
+					q_border = question.getBoundingClientRect();
+
+					if(isColliding(bcar_border, q_border)){
+						mathDialog(ai_player);
+					}
+				}
+			} 
+		}, aiMoveFreq);
+	}
+
 
 	// Player 2 Green listener
         window.addEventListener('keyup', (e) => {
@@ -332,16 +431,35 @@
 	}
 	
         function mathDialog(player){
+		let input = document.getElementById("answer");
                 box_open = true;
 		current_player = player;
                 math.textContent = RandInt() + "+" + RandInt();
                 prompt.textContent = player.name + ", answer the math problem!";
                 dialog.showModal();
+		if (current_player.name === "AI Player"){
+		    let num = Math.floor(Math.random() * 100);
+		    if (aiCorrectRate > num){ // ai is right
+			setTimeout(() =>{ input.value = eval(math.textContent);}, 500);
+		    } else {
+			setTimeout(() => { input.value = 23948;}, 500);
+		    }
+	            setTimeout(() => { submit_button.click();}, 1500); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
+		}
         }
 
     </script>
 
     <script src="{% static 'js/tts.js' %}"></script>
+    
+    <!-- strip non-number input from answer input -->
+    <script>
+	const answerInput = document.getElementById("answer");
+
+	answerInput.addEventListener("input", () => {
+	    answerInput.value = input.value.replace(/[^0-9]/g, "");
+	});
+    </script>
     
   </body>
 
