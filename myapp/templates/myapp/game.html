@@ -140,8 +140,8 @@
 	}
 
         let speed = 10;
-	let aiMoveFreq = 100; // time in ms between ai move
-	let aiCorrectRate = 100; // percentage of the time that ai guesses correctly
+	let aiMoveFreq = 10; // time in ms between ai move
+	let aiCorrectRate = 90; // percentage of the time that ai guesses correctly
 
         let rcar = document.getElementById('rcar');
         let gcar = document.getElementById('gcar');
@@ -235,7 +235,7 @@
 			let b_bottom = b_border.bottom;
 			let b_top = b_border.top;
 			
-			if (parseInt(q_top) > parseInt(b_bottom)){
+			if ((parseInt(q_top)+30) > parseInt(b_bottom)){ // car is too high
 				console.log("1");
 				if(box_open == false){
 					bcar.style.top = parseInt(bcar.style.top) + speed + 'px';
@@ -247,7 +247,7 @@
 						mathDialog(ai_player);
 					}
 				}
-			} else 	if (parseInt(q_bottom) < parseInt(b_top)){
+			} else 	if ((parseInt(q_bottom)-20) < parseInt(b_top)){ // car is too low
 				console.log("2");
 				if(box_open == false){
 					bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
@@ -283,7 +283,20 @@
 						mathDialog(ai_player);
 					}
 				}
-			} 
+			} else {
+				console.log("5");
+                                if(box_open == false){
+                                        bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
+                                        bcar.style.transform = "rotate(0deg)";
+                                        bcar_border = bcar.getBoundingClientRect();
+                                        q_border = question.getBoundingClientRect();
+
+                                        if(isColliding(bcar_border, q_border)){
+                                                mathDialog(ai_player);
+                                        }
+                                }
+
+			}
 		}, aiMoveFreq);
 	}
 
@@ -455,7 +468,7 @@
 		    if (aiCorrectRate > num){ // ai is right
 			setTimeout(() =>{ input.value = eval(math.textContent);}, 500);
 		    } else {
-			setTimeout(() => { input.value = 23948;}, 500);
+			setTimeout(() => { input.value = RandInt();}, 500);
 		    }
 	            setTimeout(() => { submit_button.click();}, 1500); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
 		}
