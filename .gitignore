@@ -1,0 +1,12 @@
+# ignore gitignore itself
+.gitignore
+
+# ignore todo list
+todo.md
+
+# ignore Python virtual env
+myenv/
+
+# ignore SQLite database
+db.sqlite3
+

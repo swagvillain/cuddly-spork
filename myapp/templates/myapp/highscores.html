@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Speed Racer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+    <style>
+	body{
+            background-image: url("{% static 'numbers-background.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+	}
+</style>
+  </head>
+  <body onload="speak('These are the High Scores! Maybe you can make it on this if you practice')">
+    <main>
+      <div class="transparent-background">
+        <h1 style="color:yellow">High Scores</h1>
+	<table border="1" cellpadding="5" cellspacing="0" style="color:yellow">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Highscore</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+	    {% for item in scores %}
+	    <tr>
+		    <td>{{ forloop.counter }}</td>
+		    <td>{{ item.player.player_name }}</td>
+		    <td>{{ item.score }}</td>
+		    <td>{{ item.timestamp|date:"Y-m-d" }}</td>
+	    </tr>
+	    {% empty %}
+	    <tr>
+		    <td colspan="4">No highscores available...</td>
+	    </tr>
+	    {% endfor %}
+
+    </tbody>
+</table>
+<button
+	class="btn btn-primary"
+	onclick="window.location.href='{% url 'mainmenu' %}';"
+	onmouseover="speak('Done looking at the high scores, are we? Let\'s go back to the Main Menu!')"
+>
+	Main Menu
+			</button>
+
+
+      </div>
+    </main>
+
+    </script>
+
+    <!-- TTS script -->
+    <script src="{% static 'js/tts.js' %}"></script>
+    
+  </body>
+</html>
+
+

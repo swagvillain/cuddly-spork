@@ -1,13 +1,42 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import ScoreLog
+import pyttsx3
 
-# Create your views here.
+robot = pyttsx3.init()
+robot.setProperty('rate', 150)
+
+
+# views here.
 
 def mainmenu(request):
     return render(request, 'myapp/mainmenu.html')
+
+def highscores(request):
+    scores = ScoreLog.objects.all()[:10]
+    return render(request, 'myapp/highscores.html', {'scores': scores})
 
 def index(request):
     return render(request, 'myapp/welcome-page.html')
 
 def game(request):
     return render(request, 'myapp/game.html')
+
+@csrf_exempt
+def ai_speech(request):
+    if request.method == "POST":
+        text = request.POST.get("text", "")
+        if text:
+                ai_says(text)
+                return HttpResponse("OK", status=200)
+        return HttpResponse("Error: no text provided", status=400)
+    return HttpResponse("Error: invalid method", status=405)
+
+
+# util functions here
+
+
+def ai_says(command):
+    robot.say(command)
+    robot.runAndWait()

@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Comic Neue", cursive ;
+}
+
+h1, h2, h3 {
+   font-family: "Comic Neue", cursive ;
+  margin: 0;
+  padding: 10px 0;
+  text-align: center;
+}
+
+main {
+  max-width: 600px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+#main-countdown {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.score1 {
+  color: red;
+}
+
+.score2 {
+  color: green;
+}
+
+.score3 {
+  color: blue;
+}
+
+.transparent-background {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  display: inline-block;
+}
+
+/* Button styling */
+button.btn {
+  font-family: "Comic Neue", cursive;
+  font-size: 16px;
+  padding: 12px 24px;
+  margin: 10px 0;
+  cursor: pointer;
+  border: 2px solid #007bff; /* blue border */
+  border-radius: 6px;
+  background-color: #007bff; /* blue background */
+  color: white;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Hover effect */
+button.btn:hover {
+  background-color: white;
+  color: #007bff;
+}
+
+/* Optional: active / pressed state */
+button.btn:active {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  color: white;
+}
+
+/* Focus outline for accessibility */
+button.btn:focus {
+  outline: 3px solid #80bdff;
+  outline-offset: 2px;
+}
+
+.modal {
+  display: none;
+}
+
+.modal-content {
+  background: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  width: 80%;
+}
+
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+
