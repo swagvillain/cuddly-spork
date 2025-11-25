@@ -53,7 +53,7 @@
         dialog {
             position: absolute;
             align-items: center;
-            height: 150px;
+            /* height: 150px; */
         }
     </style>
 
@@ -123,6 +123,18 @@
             <dialog id="gameOver">
                 <center>
                     <H1 style="color:green"> Game is Over </H1>
+                    <p>Here are the scores:</p>
+                    <table border="1" cellpadding="5" cellspacing="0" style="color:yellow">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gameOverBody">
+                        </tbody>
+
+                    </table>
                     <button class="btn btn-primary" id="goMainMenu" onclick="window.location.href='{% url 'mainmenu' %}';">
                         Quit to main menu </button>
                     </center>
@@ -141,7 +153,7 @@
 
     <!-- Timer Script -->
     <script>
-        var mainTimerDuration = 5;
+        var mainTimerDuration = 59;
         var timeLeft;
 
         function startMainTimer() {
@@ -215,26 +227,29 @@
 
         let questionDialogIsOpen = false;
 
+        let wHeight = window.innerHeight;
+        let wWidth = window.innerWidth;
+
         // initial locations of cars, q-box upon load
         window.addEventListener('load', () => {
             rcar.style.position = 'absolute';
-            rcar.style.left = 400 + 'px';
-            rcar.style.top = 200 + 'px';
+            rcar.style.left = wWidth/2 - 250 + 'px';
+            rcar.style.top = wHeight/2 + 150 + 'px';
             rcar.style.transform = 'rotate(90deg)';
 
             gcar.style.position = 'absolute';
-            gcar.style.left = 400 + "px";
-            gcar.style.top = 600 + "px";
+            gcar.style.left = wWidth/2 - 250 + 'px';
+            gcar.style.top = wHeight/2 - 150 + 'px';
             gcar.style.transform = 'rotate(90deg)';
 
             bcar.style.position = 'absolute';
-            bcar.style.left = 1000 + 'px';
-            bcar.style.top = 600 + 'px';
+            bcar.style.left = wWidth/2 + 260 + 'px';
+            bcar.style.top = wHeight/2 + 150 + 'px';
             bcar.style.transform = 'rotate(270deg)';
 
             question.style.position = 'absolute';
-            question.style.top = 400 + 'px';
-            question.style.left = 700 + 'px';
+            question.style.top = wHeight/2 + 'px';
+            question.style.left = wWidth/2 + 'px';
             question.style.padding = 0;
             question.style.border = 0;
             question.style.margin = 0;
@@ -470,7 +485,8 @@
 
         // used for random position for question box
         function RandX() {
-            return Math.floor(Math.random() * window.innerWidth); // subtracting height of bar
+            const qWidth = question.getBoundingClientRect().width;
+            return Math.floor(Math.random() * (window.innerWidth - qWidth)); // subtracting width of question
         }
 
         // used for random position for question box
@@ -515,6 +531,14 @@
 
         function gameOver() {
             gameIsPaused = true;
+
+            const tbody = document.getElementById("gameOverBody");
+            tbody.innerHTML = `
+                <tr><td>${p1.name}</td><td>${p1.scoreNum}</td></tr>
+                <tr><td>${p2.name}</td><td>${p2.scoreNum}</td></tr>
+                <tr><td>${ai_player.name}</td><td>${ai_player.scoreNum}</td></tr>
+            `;
+
             gameOverDialog.showModal();
             logScore(p1.name, p1.scoreNum);
             logScore(p2.name, p2.scoreNum);

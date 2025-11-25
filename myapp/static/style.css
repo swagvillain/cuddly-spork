@@ -116,3 +116,84 @@ button.btn:focus {
   cursor: pointer;
 }
 
+/* garbage from ChatGPT */
+/* Dialog styling */
+dialog {
+    border: none;
+    border-radius: 20px;
+    padding: 20px 40px;
+    background: linear-gradient(135deg, #ff4e50, #f9d423);
+    color: #fff;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 18px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7);
+    width: 400px;
+    max-width: 90%;
+}
+
+/* Buttons inside dialogs */
+dialog .btn {
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    padding: 12px 25px;
+    margin: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+dialog .btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #00c6ff;
+}
+
+/* Score table */
+#gameOver table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+}
+
+#gameOver th, #gameOver td {
+    padding: 10px;
+    border: 2px solid #fff;
+    text-align: center;
+}
+
+#gameOver thead {
+    background: linear-gradient(90deg, #ff512f, #dd2476);
+    color: #fff;
+    font-weight: bold;
+}
+
+#gameOver tbody tr:nth-child(odd) {
+    background: rgba(255,255,255,0.1);
+}
+
+#gameOver tbody tr:nth-child(even) {
+    background: rgba(0,0,0,0.2);
+}
+
+/* Math question & prompt */
+#prompt, #math {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #ffff00;
+    text-shadow: 2px 2px #000;
+}
+
+/* Input box */
+#answer {
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 10px;
+    border: 2px solid #fff;
+    width: 80px;
+    text-align: center;
+}
