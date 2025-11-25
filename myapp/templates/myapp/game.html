@@ -77,7 +77,6 @@
                 <div class="score1" id="score1"> Player 1 Score: 0 </div>
                 <div class="score2" id="score2">Player 2 Score: 0</div>
                 <div class="score3" id="score3">AI Player Score: 0</div>
-                <button class="btn btn-primary" onclick="logScore('Jimmy', 54)">Log stuff</button>
                 <button class="btn btn-primary" onclick="pauseGame()">Pause</button>
                 <button class="btn btn-primary" onclick="window.location.href='{% url 'mainmenu' %}';">
                     Exit to Main Menu
@@ -85,7 +84,6 @@
                 <p id="main-countdown">60</p>
             </div>
             
-
             <dialog id="dialog">
                 <center>
                     <div id="prompt"> Answer The Math Problem! </div>
@@ -133,22 +131,20 @@
                         </thead>
                         <tbody id="gameOverBody">
                         </tbody>
-
                     </table>
                     <button class="btn btn-primary" id="goMainMenu" onclick="window.location.href='{% url 'mainmenu' %}';">
                         Quit to main menu </button>
                     </center>
-
             </dialog>
-
 
         </main> 
 
+        <!-- cars and questionbox -->
         <div class="question_icon"> <img id=question width=35 src="{% static 'question.png' %}"> </img> </div>
-
         <div class="car"> <img id=rcar width=50 src="{% static 'RedCar.png' %}"> </img> </div>
         <div class="car"> <img id=gcar width=50 src="{% static 'GreenCar.png' %}"> </img> </div>
         <div class="car"> <img id=bcar width=50 src="{% static 'BlueCar.png' %}"> </img> </div>
+
     </div>
 
     <!-- Timer Script -->
@@ -613,7 +609,7 @@
         const answerInput = document.getElementById("answer");
 
         answerInput.addEventListener("input", () => {
-            answerInput.value = input.value.replace(/[^0-9]/g, "");
+            answerInput.value = answerInput.value.replace(/[^0-9]/g, "");
         });
     </script>
 
