@@ -264,6 +264,13 @@
             }
         });
 
+        // listener for enter key to submit answer
+        window.addEventListener('keyup', (e) => {
+            if (e.key == 'Escape') {
+                pauseGame();
+            }
+        });
+
         // ai movement
         function moveAI() {
             var needGoUp = false;
