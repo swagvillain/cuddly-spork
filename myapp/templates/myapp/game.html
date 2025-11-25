@@ -64,19 +64,16 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   </head>
-  <body onload="speak('Let\'s go')">
+  <body class="bg"  onload="speak('Let\'s go')">
 
     <div class="bg">
 
         <main>
         <h1 style="text-align: center;">Race Time</h1>  
-	<br>
 	<div class="score1" id="score1"> Player 1 Score: 0 </div>
-        <br>
         <div class="score2" id="score2">Player 2 Score: 0</div>
-	<br>
         <div class="score3" id="score3">AI Player Score: 0</div>
-
+	<button class="btn btn-primary" onclick="logScore('Jimmy', 54)">Log stuff</button>
         
         <dialog id = "dialog">
                 <center>
@@ -140,7 +137,7 @@
 	}
 
         let speed = 10;
-	let aiMoveFreq = 10; // time in ms between ai move
+	let aiMoveFreq = 100; // time in ms between ai move
 	let aiCorrectRate = 90; // percentage of the time that ai guesses correctly
 
         let rcar = document.getElementById('rcar');
@@ -474,6 +471,40 @@
 		}
         }
 
+    </script>
+    
+    <!-- log player score -->
+    <script>
+	async function logScore(player, score) {
+		
+		const scoreData = {
+			score:score,
+			player:player
+		}
+
+		const response = await fetch("/myapp/log_player_score/", {
+		  method: "POST",
+		  headers: {
+			  "Content-Type": "application/json",
+			  "X-CSRFToken": getCookie("csrftoken")
+		  },
+		  body: JSON.stringify(scoreData)
+		});
+
+		const data = await response.json();
+	}
+
+	// CSRF token helper (required by Django for POST)
+	function getCookie(name) {
+	  let cookieValue = null;
+	  document.cookie.split(";").forEach(cookie => {
+	    cookie = cookie.trim();
+	    if (cookie.startsWith(name + "=")) {
+	      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            }
+	  });
+	  return cookieValue;
+	}
     </script>
 
     <script src="{% static 'js/tts.js' %}"></script>

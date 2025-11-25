@@ -58,9 +58,9 @@ button.btn {
   padding: 12px 24px;
   margin: 10px 0;
   cursor: pointer;
-  border: 2px solid #007bff; /* blue border */
+  border: 2px solid #2b951a; /* blue border */
   border-radius: 6px;
-  background-color: #007bff; /* blue background */
+  background-color: #2b951a; /* green background */
   color: white;
   transition: background-color 0.2s, color 0.2s;
 }

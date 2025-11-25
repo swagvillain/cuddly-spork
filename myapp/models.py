@@ -12,3 +12,5 @@ class ScoreLog(models.Model):
 
     class Meta:
         ordering = ['-score']  # highest score first
+        
+
