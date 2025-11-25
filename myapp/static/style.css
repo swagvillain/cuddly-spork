@@ -11,7 +11,22 @@ h1, h2, h3 {
   text-align: center;
 }
 
+.top-bar {
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around; /* or space-between */
+    background: rgba(126, 126, 126, 0.6);
+    color: white;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+}
+
 main {
+  margin-top: 150px;
   max-width: 600px;
   margin: 40px auto;
   text-align: center;
@@ -26,9 +41,9 @@ ul {
     color: white;
     font-size: 24px;
     font-weight: bold;
-    position: absolute;
+    /* position: absolute;
     top: 20px;
-    left: 20px;
+    left: 20px; */
 }
 
 .score1 {
@@ -36,11 +51,11 @@ ul {
 }
 
 .score2 {
-  color: green;
+  color: lightgreen;
 }
 
 .score3 {
-  color: blue;
+  color: skyblue;
 }
 
 .transparent-background {
@@ -58,9 +73,9 @@ button.btn {
   padding: 12px 24px;
   margin: 10px 0;
   cursor: pointer;
-  border: 2px solid #2b951a; /* blue border */
+  border: 2px solid #2b951a;
   border-radius: 6px;
-  background-color: #2b951a; /* green background */
+  background-color: #2b951a;
   color: white;
   transition: background-color 0.2s, color 0.2s;
 }
@@ -68,13 +83,13 @@ button.btn {
 /* Hover effect */
 button.btn:hover {
   background-color: white;
-  color: #007bff;
+  color: #2b951a;
 }
 
 /* Optional: active / pressed state */
 button.btn:active {
-  background-color: #0056b3;
-  border-color: #0056b3;
+  background-color: #2b951a;
+  border-color: #2b951a;
   color: white;
 }
 

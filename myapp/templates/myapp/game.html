@@ -3,520 +3,588 @@
 <html lang="en">
 
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-        <!-- ******* BEGIN STLYE ******* -->
-        <style>
-                body,
-                html {
-                        height: 100%;
-                        margin: 0;
-                        overflow: hidden
-                }
+    <!-- ******* BEGIN STLYE ******* -->
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden
+        }
 
-                h1 {
-                        color: white;
-                }
+        h1 {
+            color: white;
+        }
 
-                .bg {
-                        background-image: url("{% static 'black_background.jpg' %}");
+        .bg {
+            background-image: url("{% static 'black_background.jpg' %}");
 
-                        height: 100%;
+            height: 100%;
 
-                        background-position: center;
-                        background-repeat: no-repeat;
-                        background-size: cover;
-                }
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
 
-                .car {
-                        height: 10px;
-                        width: 10px;
-                }
+        .car {
+            height: 10px;
+            width: 10px;
+        }
 
-                .redCar {
-                        height: 10px;
-                        width: 10px;
-                }
+        .redCar {
+            height: 10px;
+            width: 10px;
+        }
 
-                .greenCar {
-                        height: 10px;
-                        width: 10px;
-                }
+        .greenCar {
+            height: 10px;
+            width: 10px;
+        }
 
-                .question_icon {
-                        height: 20px;
-                        width: 20px;
-                }
+        .question_icon {
+            height: 20px;
+            width: 20px;
+        }
 
-                dialog {
-                        position: absolute;
-                        align-items: center;
-                        height: 100px;
-                }
-        </style>
+        dialog {
+            position: absolute;
+            align-items: center;
+            height: 150px;
+        }
+    </style>
 
-        <!-- ******* END STLYE ******* -->
+    <!-- ******* END STLYE ******* -->
 
 
-        <!-- ******* BEGIN HTML/CONTENT ******** -->
+    <!-- ******* BEGIN HTML/CONTENT ******** -->
 
-        <title>Speed Racer</title>
-        <link rel="stylesheet" href="{% static 'style.css' %}">
-        <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <title>Speed Racer</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 
-<body class="bg" onload="speak('Let\'s go')">
+<body style="--bar-height: 150px" class="bg" onload="speak('Let\'s go')">
 
-        <div class="bg">
+    <div class="bg">
 
-                <main>
-                        <h1 style="text-align: center;">Race Time</h1>
-                        <div class="score1" id="score1"> Player 1 Score: 0 </div>
-                        <div class="score2" id="score2">Player 2 Score: 0</div>
-                        <div class="score3" id="score3">AI Player Score: 0</div>
-                        <button class="btn btn-primary" onclick="logScore('Jimmy', 54)">Log stuff</button>
+        <main>
+            <div class="top-bar">
+                <h1 style="text-align: center;">Race Time</h1>
+                <div class="score1" id="score1"> Player 1 Score: 0 </div>
+                <div class="score2" id="score2">Player 2 Score: 0</div>
+                <div class="score3" id="score3">AI Player Score: 0</div>
+                <button class="btn btn-primary" onclick="logScore('Jimmy', 54)">Log stuff</button>
+                <button class="btn btn-primary" onclick="pauseGame()">Pause</button>
+                <button class="btn btn-primary" onclick="window.location.href='{% url 'mainmenu' %}';">
+                    Exit to Main Menu
+                </button>
+                <p id="main-countdown">60</p>
+            </div>
+            
 
-                        <dialog id="dialog">
-                                <center>
-                                        <div id="prompt"> Answer The Math Problem! </div>
+            <dialog id="dialog">
+                <center>
+                    <div id="prompt"> Answer The Math Problem! </div>
 
-                                        <div id="math"> Math Question</div>
+                    <div id="math"> Math Question</div>
 
-                                        <input id="answer" type="text" autocomplete="off">
-                                        <br>
-                                        <br>
-                                        <button id="submit"> Submit Answer </button>
-                                </center>
+                    <input id="answer" type="text" autocomplete="off">
+                    <br>
+                    <br>
+                    <button id="submit"> Submit Answer </button>
+                </center>
 
-                        </dialog>
+            </dialog>
 
-                        <br>
-                        <button class="btn btn-primary" onclick="window.location.href='{% url 'mainmenu' %}';">
-                                Exit to Main Menu
-                        </button>
+            <dialog id="startDialog">
+                <center>
+                    <div> Ready to play the game? </div>
+                    <p>Player 1 will use the arrow keys, and Player 2 will use WASD to move</p>
+                    <button class="btn btn-primary" id="startGameBtn" onclick="startGame()"> Start game! </button>
+                </center>
 
-                        <p id="main-countdown"></p>
-                </main>
+            </dialog>
 
-                <div class="question_icon"> <img id=question width=35 src="{% static 'question.png' %}"> </img> </div>
+            <dialog id="pauseDialog">
+                <center>
+                    <H1 style="color:green"> Game is paused </H1>
+                    <button class="btn btn-primary" id="goMainMenu" onclick="window.location.href='{% url 'mainmenu' %}';">
+                        Quit to main menu </button>
+                    <button class="btn btn-primary">See Rules/tutorial (not implemented)</button>
+                    <button class="btn btn-primary" id="resumeGame" onclick="resumeGame()"> Resume game </button>
+                </center>
 
-                <div class="car"> <img id=rcar width=50 src="{% static 'RedCar.png' %}"> </img> </div>
-                <div class="car"> <img id=gcar width=50 src="{% static 'GreenCar.png' %}"> </img> </div>
-                <div class="car"> <img id=bcar width=50 src="{% static 'BlueCar.png' %}"> </img> </div>
+            </dialog>
 
-        </div>
+            <dialog id="gameOver">
+                <center>
+                    <H1 style="color:green"> Game is Over </H1>
+                    <button class="btn btn-primary" id="goMainMenu" onclick="window.location.href='{% url 'mainmenu' %}';">
+                        Quit to main menu </button>
+                    </center>
 
-        <!-- Timer Script -->
-        <script>
-                var mainTimerDuration = 60;
-                var timeLeft;
+            </dialog>
 
-                function startMainTimer() {
-                        timeLeft = mainTimerDuration;
-                        var x = setInterval(function () {
-                                if (timeLeft < 1) {
-                                        clearInterval(x);
-                                        document.getElementById("main-countdown").innerHTML = "Game Over";
-                                } else {
-                                        document.getElementById("main-countdown").innerHTML = timeLeft;
-                                        timeLeft--;
-                                }
-                        }, 1000);
+
+        </main> 
+
+        <div class="question_icon"> <img id=question width=35 src="{% static 'question.png' %}"> </img> </div>
+
+        <div class="car"> <img id=rcar width=50 src="{% static 'RedCar.png' %}"> </img> </div>
+        <div class="car"> <img id=gcar width=50 src="{% static 'GreenCar.png' %}"> </img> </div>
+        <div class="car"> <img id=bcar width=50 src="{% static 'BlueCar.png' %}"> </img> </div>
+    </div>
+
+    <!-- Timer Script -->
+    <script>
+        var mainTimerDuration = 5;
+        var timeLeft;
+
+        function startMainTimer() {
+            timeLeft = mainTimerDuration;
+            var x = setInterval(function () {
+                if (!questionDialogIsOpen && !gameIsPaused) {
+
+                    if (timeLeft < 1) {
+                        clearInterval(x);
+                        document.getElementById("main-countdown").innerHTML = "Game Over";
+                        gameOver();
+                    } else {
+                        document.getElementById("main-countdown").innerHTML = timeLeft;
+                        timeLeft--;
+                    }
                 }
-        </script>
+            }, 1000);
+        }
+    </script>
 
-        <script>
+    <!-- Everything Script-->
+    <script>
 
-                function Player(name, scoreNum, scoreVar, moveSpeed) {
-                        this.name = name;
-                        this.scoreNum = scoreNum;
-                        this.scoreVar = scoreVar;
-                        this.moveSpeed = moveSpeed;
-                }
+        function Player(name, scoreNum, scoreVar, moveSpeed) {
+            this.name = name;
+            this.scoreNum = scoreNum;
+            this.scoreVar = scoreVar;
+            this.moveSpeed = moveSpeed;
+        }
 
-                let speed = 10;
-                let aiMoveFreq = 100; // time in ms between ai move
-                let aiCorrectRate = 90; // percentage of the time that ai guesses correctly
+        let hasGameStarted = false;
+        let startDialogIsOpen = true;
+        let gameIsPaused = true;
 
-                let rcar = document.getElementById('rcar');
-                let gcar = document.getElementById('gcar');
-                let bcar = document.getElementById('bcar');
+        let speed = 10;
+        let aiMoveFreq = 300; // time in ms between ai move
+        let aiCorrectRate = 90; // percentage of the time that ai guesses correctly
 
-                let question = document.getElementById('question');
+        let rcar = document.getElementById('rcar');
+        let gcar = document.getElementById('gcar');
+        let bcar = document.getElementById('bcar');
 
-                let s1 = document.getElementById("score1");
-                let s2 = document.getElementById("score2");
-                let s3 = document.getElementById("score3");
+        let question = document.getElementById('question');
 
-                let p1_score = 0;
-                let p2_score = 0;
-                let ai_score = 0;
+        let s1 = document.getElementById("score1");
+        let s2 = document.getElementById("score2");
+        let s3 = document.getElementById("score3");
 
-                let p1 = new Player("Player 1", p1_score, s1, speed);
-                let p2 = new Player("Player 2", p2_score, s2, speed);
-                let ai_player = new Player("AI Player", ai_score, s3, speed);
-                let current_player = null;
 
-                let user_answer = document.getElementById("answer");
-                let submit_button = document.getElementById("submit");
-                let math = document.getElementById("math");
-                let prompt = document.getElementById("prompt");
+        let p1 = new Player("Player 1", 0, s1, speed);
+        let p2 = new Player("Player 2", 0, s2, speed);
+        let ai_player = new Player("AI Player", 0, s3, speed);
+        let current_player = null;
 
-                let car_border = rcar.getBoundingClientRect();
-                let gcar_border = gcar.getBoundingClientRect();
-                // let bcar_border = bcar.getBoudingClientRect();
+        let user_answer = document.getElementById("answer");
+        let submit_button = document.getElementById("submit");
+        let math = document.getElementById("math");
+        let prompt = document.getElementById("prompt");
 
+        let car_border = rcar.getBoundingClientRect();
+        let gcar_border = gcar.getBoundingClientRect();
+        // let bcar_border = bcar.getBoudingClientRect();
+
+        let q_border = question.getBoundingClientRect();
+
+        // dialog declarations
+        let pauseDialog = document.getElementById("pauseDialog");
+        let startDialog = document.getElementById("startDialog");
+        let questionDialog = document.getElementById("dialog");
+        let gameOverDialog = document.getElementById("gameOver")
+
+        let questionDialogIsOpen = false;
+
+        // initial locations of cars, q-box upon load
+        window.addEventListener('load', () => {
+            rcar.style.position = 'absolute';
+            rcar.style.left = 400 + 'px';
+            rcar.style.top = 200 + 'px';
+            rcar.style.transform = 'rotate(90deg)';
+
+            gcar.style.position = 'absolute';
+            gcar.style.left = 400 + "px";
+            gcar.style.top = 600 + "px";
+            gcar.style.transform = 'rotate(90deg)';
+
+            bcar.style.position = 'absolute';
+            bcar.style.left = 1000 + 'px';
+            bcar.style.top = 600 + 'px';
+            bcar.style.transform = 'rotate(270deg)';
+
+            question.style.position = 'absolute';
+            question.style.top = 400 + 'px';
+            question.style.left = 700 + 'px';
+            question.style.padding = 0;
+            question.style.border = 0;
+            question.style.margin = 0;
+
+            startDialog.showModal();
+        });
+
+        // listener for enter key to submit answer
+        window.addEventListener('keyup', (e) => {
+            if (e.key == 'Enter') {
+                submit_button.click();
+            }
+        });
+
+        // ai movement
+        function moveAI() {
+            var needGoUp = false;
+            var needGoDown = false;
+            var needGoLeft = false;
+            var needGoRight = false;
+            let q_border = question.getBoundingClientRect();
+            let q_bottom = q_border.bottom;
+            let q_top = q_border.top;
+            let b_border = bcar.getBoundingClientRect();
+            let b_bottom = b_border.bottom;
+            let b_top = b_border.top;
+
+            var targetY = question.style.top;
+            var targetX = question.style.left;
+
+            var x = setInterval(function () {
                 let q_border = question.getBoundingClientRect();
+                let q_bottom = q_border.bottom;
+                let q_top = q_border.top;
+                let b_border = bcar.getBoundingClientRect();
+                let b_bottom = b_border.bottom;
+                let b_top = b_border.top;
 
-                let dialog = document.getElementById("dialog");
-                //let gdialog = document.getElementById("dialog2");
-                let box_open = false;
+                if (!questionDialogIsOpen && !gameIsPaused) {
 
-                // initial locations of cars, q-box upon load
-                window.addEventListener('load', () => {
-                        rcar.style.position = 'absolute';
-                        rcar.style.left = 400 + 'px';
-                        rcar.style.top = 200 + 'px';
-                        rcar.style.transform = 'rotate(90deg)';
+                    if ((parseInt(q_top) + 30) > parseInt(b_bottom)) { // car is too high
+                        // console.log("1");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.top = parseInt(bcar.style.top) + speed + 'px';
+                            bcar.style.transform = "rotate(180deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
 
-                        gcar.style.position = 'absolute';
-                        gcar.style.left = 400 + "px";
-                        gcar.style.top = 600 + "px";
-                        gcar.style.transform = 'rotate(90deg)';
-
-                        bcar.style.position = 'absolute';
-                        bcar.style.left = 1000 + 'px';
-                        bcar.style.top = 600 + 'px';
-                        bcar.style.transform = 'rotate(270deg)';
-
-                        question.style.position = 'absolute';
-                        question.style.top = 400 + 'px';
-                        question.style.left = 700 + 'px';
-                        question.style.padding = 0;
-                        question.style.border = 0;
-                        question.style.margin = 0;
-                        startMainTimer();
-                        moveAI();
-                });
-
-                // listener for enter key to submit answer
-                window.addEventListener('keyup', (e) => {
-                        if (e.key == 'Enter') {
-                                submit_button.click();
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
                         }
-                });
+                    } else if ((parseInt(q_bottom) - 20) < parseInt(b_top)) { // car is too low
+                        // console.log("2");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
+                            bcar.style.transform = "rotate(0deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
 
-                // ai movement
-                function moveAI() {
-                        var needGoUp = false;
-                        var needGoDown = false;
-                        var needGoLeft = false;
-                        var needGoRight = false;
-                        let q_border = question.getBoundingClientRect();
-                        let q_bottom = q_border.bottom;
-                        let q_top = q_border.top;
-                        let b_border = bcar.getBoundingClientRect();
-                        let b_bottom = b_border.bottom;
-                        let b_top = b_border.top;
-
-                        var targetY = question.style.top;
-                        var targetX = question.style.left;
-
-                        var x = setInterval(function () {
-                                let q_border = question.getBoundingClientRect();
-                                let q_bottom = q_border.bottom;
-                                let q_top = q_border.top;
-                                let b_border = bcar.getBoundingClientRect();
-                                let b_bottom = b_border.bottom;
-                                let b_top = b_border.top;
-
-                                if ((parseInt(q_top) + 30) > parseInt(b_bottom)) { // car is too high
-                                        console.log("1");
-                                        if (box_open == false) {
-                                                bcar.style.top = parseInt(bcar.style.top) + speed + 'px';
-                                                bcar.style.transform = "rotate(180deg)";
-                                                bcar_border = bcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(bcar_border, q_border)) {
-                                                        mathDialog(ai_player);
-                                                }
-                                        }
-                                } else if ((parseInt(q_bottom) - 20) < parseInt(b_top)) { // car is too low
-                                        console.log("2");
-                                        if (box_open == false) {
-                                                bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
-                                                bcar.style.transform = "rotate(0deg)";
-                                                bcar_border = bcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(bcar_border, q_border)) {
-                                                        mathDialog(ai_player);
-                                                }
-                                        }
-                                } else if (parseInt(question.style.left) > parseInt(bcar.style.left)) {
-                                        console.log("3");
-                                        if (box_open == false) {
-                                                bcar.style.left = parseInt(bcar.style.left) + speed + 'px';
-                                                bcar.style.transform = "rotate(90deg)";
-                                                bcar_border = bcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(bcar_border, q_border)) {
-                                                        mathDialog(ai_player);
-                                                }
-                                        }
-                                } else if (parseInt(question.style.left) < parseInt(bcar.style.left)) {
-                                        console.log("4");
-                                        if (box_open == false) {
-                                                bcar.style.left = parseInt(bcar.style.left) - speed + 'px';
-                                                bcar.style.transform = "rotate(270deg)";
-                                                bcar_border = bcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(bcar_border, q_border)) {
-                                                        mathDialog(ai_player);
-                                                }
-                                        }
-                                } else {
-                                        console.log("5");
-                                        if (box_open == false) {
-                                                bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
-                                                bcar.style.transform = "rotate(0deg)";
-                                                bcar_border = bcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(bcar_border, q_border)) {
-                                                        mathDialog(ai_player);
-                                                }
-                                        }
-
-                                }
-                        }, aiMoveFreq);
-                }
-
-
-                // Player 2 Green listener
-                window.addEventListener('keyup', (e) => {
-
-                        switch (e.key) {
-                                case 'd':
-                                        if (box_open == false) {
-                                                gcar.style.left = parseInt(gcar.style.left) + speed + 'px';
-                                                gcar.style.transform = "rotate(90deg)";
-                                                gcar_border = gcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(gcar_border, q_border)) {
-                                                        mathDialog(p2);
-                                                }
-                                                break;
-                                        }
-
-                                case 'a':
-                                        if (box_open == false) {
-                                                gcar.style.left = parseInt(gcar.style.left) - speed + 'px';
-                                                gcar.style.transform = "rotate(-90deg)";
-                                                gcar_border = gcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(gcar_border, q_border)) {
-                                                        mathDialog(p2);
-                                                }
-                                                break;
-                                        }
-
-                                case 'w':
-                                        if (box_open == false) {
-                                                gcar.style.top = parseInt(gcar.style.top) - speed + 'px';
-                                                gcar.style.transform = "rotate(0deg)";
-                                                gcar_border = gcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(gcar_border, q_border)) {
-                                                        mathDialog(p2);
-                                                }
-                                                break;
-                                        }
-
-                                case 's':
-                                        if (box_open == false) {
-
-                                                gcar.style.top = parseInt(gcar.style.top) + speed + 'px';
-                                                gcar.style.transform = "rotate(180deg)";
-                                                gcar_border = gcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(gcar_border, q_border)) {
-                                                        mathDialog(p2);
-                                                }
-                                                break;
-                                        }
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
                         }
-                });
+                    } else if (parseInt(question.style.left) > parseInt(bcar.style.left)) {
+                        // console.log("3");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.left = parseInt(bcar.style.left) + speed + 'px';
+                            bcar.style.transform = "rotate(90deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
 
-                // just 1 eventListener for incrementing score
-                submit_button.addEventListener("click", () => {
-                        if (!current_player)
-                                return;
-
-                        dialog.close();
-                        let answer_key = eval(math.textContent);
-
-                        if (answer_key == user_answer.value) {
-                                current_player.scoreNum++;
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
                         }
-                        current_player.scoreVar.textContent = current_player.name + " score: " + current_player.scoreNum;
-                        question.style.top = RandY() + 'px';
-                        question.style.left = RandX() + 'px';
-                        box_open = false;
-                        current_player = null;
-                        user_answer.value = "";
-                });
+                    } else if (parseInt(question.style.left) < parseInt(bcar.style.left)) {
+                        // console.log("4");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.left = parseInt(bcar.style.left) - speed + 'px';
+                            bcar.style.transform = "rotate(270deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
 
-                // Player 1, red car control listener
-                window.addEventListener('keyup', (e) => {
-
-                        switch (e.key) {
-                                case 'ArrowRight':
-                                        if (box_open == false) {
-                                                rcar.style.left = parseInt(rcar.style.left) + speed + 'px';
-                                                rcar.style.transform = "rotate(90deg)";
-                                                car_border = rcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(car_border, q_border)) {
-                                                        mathDialog(p1);
-                                                }
-                                                break;
-                                        }
-                                case 'ArrowLeft':
-                                        if (box_open == false) {
-                                                rcar.style.left = parseInt(rcar.style.left) - speed + 'px';
-                                                rcar.style.transform = "rotate(-90deg)";
-                                                car_border = rcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(car_border, q_border)) {
-                                                        mathDialog(p1);
-                                                }
-                                                break;
-                                        }
-
-                                case 'ArrowUp':
-                                        if (box_open == false) {
-                                                rcar.style.top = parseInt(rcar.style.top) - speed + 'px';
-                                                rcar.style.transform = "rotate(0deg)";
-                                                car_border = rcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(car_border, q_border)) {
-                                                        mathDialog(p1);
-                                                }
-                                                break;
-                                        }
-
-                                case 'ArrowDown':
-                                        if (box_open == false) {
-                                                rcar.style.top = parseInt(rcar.style.top) + speed + 'px';
-                                                rcar.style.transform = "rotate(180deg)";
-                                                car_border = rcar.getBoundingClientRect();
-                                                q_border = question.getBoundingClientRect();
-
-                                                if (isColliding(car_border, q_border)) {
-                                                        mathDialog(p1);
-                                                }
-                                                break;
-                                        }
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
                         }
-                });
+                    } else {
+                        // console.log("5");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
+                            bcar.style.transform = "rotate(0deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
 
-                function RandInt() {
-                        return Math.floor(Math.random() * 11);
-                }
-
-                function RandX() {
-                        return Math.floor(Math.random() * 1400)
-                }
-
-                function RandY() {
-                        return Math.floor(Math.random() * 650)
-                }
-
-                function isColliding(car_border, q_border) {
-                        if (!(car_border.left > q_border.right || car_border.right < q_border.left || car_border.bottom < q_border.top || car_border.top > q_border.bottom)) {
-                                return true;
-                        } else {
-                                return false;
-                        }
-                }
-
-                function mathDialog(player) {
-                        let input = document.getElementById("answer");
-                        box_open = true;
-                        current_player = player;
-                        math.textContent = RandInt() + "+" + RandInt();
-                        prompt.textContent = player.name + ", answer the math problem!";
-                        dialog.showModal();
-                        if (current_player.name === "AI Player") {
-                                let num = Math.floor(Math.random() * 100);
-                                if (aiCorrectRate > num) { // ai is right
-                                        setTimeout(() => { input.value = eval(math.textContent); }, 500);
-                                } else {
-                                        setTimeout(() => { input.value = RandInt(); }, 500);
-                                }
-                                setTimeout(() => { submit_button.click(); }, 1500); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
-                        }
-                }
-
-        </script>
-
-        <!-- log player score -->
-        <script>
-                async function logScore(player, score) {
-
-                        const scoreData = {
-                                score: score,
-                                player: player
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
                         }
 
-                        const response = await fetch("/myapp/log_player_score/", {
-                                method: "POST",
-                                headers: {
-                                        "Content-Type": "application/json",
-                                        "X-CSRFToken": getCookie("csrftoken")
-                                },
-                                body: JSON.stringify(scoreData)
-                        });
-
-                        const data = await response.json();
+                    }
                 }
+            }, aiMoveFreq);
+        }
 
-                // CSRF token helper (required by Django for POST)
-                function getCookie(name) {
-                        let cookieValue = null;
-                        document.cookie.split(";").forEach(cookie => {
-                                cookie = cookie.trim();
-                                if (cookie.startsWith(name + "=")) {
-                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                }
-                        });
-                        return cookieValue;
+
+        // Player 2 Green listener
+        window.addEventListener('keyup', (e) => {
+            if (!questionDialogIsOpen && !gameIsPaused) {
+                switch (e.key) {
+                    case 'd':
+                        gcar.style.left = parseInt(gcar.style.left) + speed + 'px';
+                        gcar.style.transform = "rotate(90deg)";
+                        gcar_border = gcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(gcar_border, q_border)) {
+                            openQuestionDialog(p2);
+                        }
+                        break;
+
+                    case 'a':
+                        gcar.style.left = parseInt(gcar.style.left) - speed + 'px';
+                        gcar.style.transform = "rotate(-90deg)";
+                        gcar_border = gcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(gcar_border, q_border)) {
+                            openQuestionDialog(p2);
+                        }
+                        break;
+
+                    case 'w':
+                        gcar.style.top = parseInt(gcar.style.top) - speed + 'px';
+                        gcar.style.transform = "rotate(0deg)";
+                        gcar_border = gcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(gcar_border, q_border)) {
+                            openQuestionDialog(p2);
+                        }
+                        break;
+
+                    case 's':
+
+                        gcar.style.top = parseInt(gcar.style.top) + speed + 'px';
+                        gcar.style.transform = "rotate(180deg)";
+                        gcar_border = gcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(gcar_border, q_border)) {
+                            openQuestionDialog(p2);
+                        }
+                        break;
                 }
-        </script>
+            }
+        });
 
-        <script src="{% static 'js/tts.js' %}"></script>
+        // just 1 eventListener for incrementing score
+        submit_button.addEventListener("click", () => {
+            if (!current_player)
+                return;
 
-        <!-- strip non-number input from answer input -->
-        <script>
-                const answerInput = document.getElementById("answer");
+            questionDialog.close();
+            let answer_key = eval(math.textContent);
 
-                answerInput.addEventListener("input", () => {
-                        answerInput.value = input.value.replace(/[^0-9]/g, "");
-                });
-        </script>
+            if (answer_key == user_answer.value) {
+                current_player.scoreNum++;
+            }
+            current_player.scoreVar.textContent = current_player.name + " score: " + current_player.scoreNum;
+            question.style.top = RandY() + 'px';
+            question.style.left = RandX() + 'px';
+            questionDialogIsOpen = false;
+            current_player = null;
+            user_answer.value = "";
+        });
+
+        // Player 1, red car control listener
+        window.addEventListener('keyup', (e) => {
+            if (!questionDialogIsOpen && !gameIsPaused) {
+
+                switch (e.key) {
+                    case 'ArrowRight':
+                        rcar.style.left = parseInt(rcar.style.left) + speed + 'px';
+                        rcar.style.transform = "rotate(90deg)";
+                        car_border = rcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(car_border, q_border)) {
+                            openQuestionDialog(p1);
+                        }
+                        break;
+                    case 'ArrowLeft':
+                        rcar.style.left = parseInt(rcar.style.left) - speed + 'px';
+                        rcar.style.transform = "rotate(-90deg)";
+                        car_border = rcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(car_border, q_border)) {
+                            openQuestionDialog(p1);
+                        }
+                        break;
+
+                    case 'ArrowUp':
+                        rcar.style.top = parseInt(rcar.style.top) - speed + 'px';
+                        rcar.style.transform = "rotate(0deg)";
+                        car_border = rcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(car_border, q_border)) {
+                            openQuestionDialog(p1);
+                        }
+                        break;
+
+                    case 'ArrowDown':
+                        rcar.style.top = parseInt(rcar.style.top) + speed + 'px';
+                        rcar.style.transform = "rotate(180deg)";
+                        car_border = rcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(car_border, q_border)) {
+                            openQuestionDialog(p1);
+                        }
+                        break;
+                }
+            }
+        });
+
+        function RandInt() {
+            return Math.floor(Math.random() * 11);
+        }
+
+        // used for random position for question box
+        function RandX() {
+            return Math.floor(Math.random() * window.innerWidth); // subtracting height of bar
+        }
+
+        // used for random position for question box
+        function RandY() {
+            const bar = getBarHeight();
+            const qHeight = question.getBoundingClientRect().height;
+            return Math.floor(Math.random() * (window.innerHeight-bar)) + bar - qHeight; // subtracting height of bar
+        }
+
+        function getBarHeight() {
+            return parseInt(
+                getComputedStyle(document.body)
+                .getPropertyValue('--bar-height')
+            );
+        }
+
+        function isColliding(car_border, q_border) {
+            if (!(car_border.left > q_border.right || car_border.right < q_border.left || car_border.bottom < q_border.top || car_border.top > q_border.bottom)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function startGame() {
+            startDialog.close();
+            startMainTimer();
+            moveAI();
+            hasGameStarted = true;
+            gameIsPaused = false;
+        }
+
+        function pauseGame() {
+            gameIsPaused = true;
+            pauseDialog.showModal();
+        }
+
+        function resumeGame() {
+            gameIsPaused = false;
+            pauseDialog.close();
+        }
+
+        function gameOver() {
+            gameIsPaused = true;
+            gameOverDialog.showModal();
+            logScore(p1.name, p1.scoreNum);
+            logScore(p2.name, p2.scoreNum);
+            logScore(ai_player.name, ai_player.scoreNum);
+        }
+
+        function openQuestionDialog(player) {
+            let input = document.getElementById("answer");
+            questionDialogIsOpen = true;
+            current_player = player;
+            math.textContent = RandInt() + "+" + RandInt();
+            prompt.textContent = player.name + ", answer the math problem!";
+            questionDialog.showModal();
+            if (current_player.name === "AI Player") {
+                let num = Math.floor(Math.random() * 100);
+                if (aiCorrectRate > num) { // ai is right
+                    setTimeout(() => { input.value = eval(math.textContent); }, 500);
+                } else {
+                    setTimeout(() => { input.value = RandInt(); }, 500);
+                }
+                setTimeout(() => { submit_button.click(); }, 1500); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
+            }
+        }
+
+    </script>
+
+    <!-- log player score -->
+    <script>
+        async function logScore(player, score) {
+
+            const scoreData = {
+                score: score,
+                player: player
+            }
+
+            const response = await fetch("/myapp/log_player_score/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                body: JSON.stringify(scoreData)
+            });
+
+            const data = await response.json();
+        }
+
+        // CSRF token helper (required by Django for POST)
+        function getCookie(name) {
+            let cookieValue = null;
+            document.cookie.split(";").forEach(cookie => {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            });
+            return cookieValue;
+        }
+    </script>
+
+    <script src="{% static 'js/tts.js' %}"></script>
+
+    <!-- strip non-number input from answer input -->
+    <script>
+        const answerInput = document.getElementById("answer");
+
+        answerInput.addEventListener("input", () => {
+            answerInput.value = input.value.replace(/[^0-9]/g, "");
+        });
+    </script>
 
 </body>
 
