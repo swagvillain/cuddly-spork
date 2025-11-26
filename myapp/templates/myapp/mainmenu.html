@@ -58,7 +58,7 @@
 }
 </style>
   </head>
-  <body onload="speak('I\'m glad you foundthe main menu. Click a button')">
+  <body onload="speak('I\'m glad you found the main menu. Click a button')">
     <main>
       <div class="transparent-background">
        <div class="menu">
@@ -68,7 +68,7 @@
 			<button
 				class="btn btn-primary"
 				onclick="window.location.href='{% url 'game' %}';"
-				onmouseover="speak('Are you ready? Then get a friend and play the game with me!')"
+				onmouseover="speak('Ready?')"
 			>
 			Play Game!	
 			</button>
@@ -85,7 +85,7 @@
 			<button
 				class="btn btn-primary"
 				onclick="window.location.href='{% url 'highscores' %}';"
-				onmouseover="speak('Want to see the highscores?')"
+				onmouseover="speak('')"
 			>
 			High Scores	
 			</button>
@@ -123,7 +123,7 @@
 	// Get the button that opens the modal
 	var btn = document.getElementById("rulesButton");
 	btn.addEventListener('mouseover', () => {
-		speak('Do you know how to play this game? If you don\'t, then read the rules by clicking this button.');
+		speak('Do you know how to play?');
 	});
 
 	btn.addEventListener('click', () => {
