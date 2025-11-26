@@ -145,6 +145,9 @@
         <div class="car"> <img id=gcar width=50 src="{% static 'GreenCar.png' %}"> </img> </div>
         <div class="car"> <img id=bcar width=50 src="{% static 'BlueCar.png' %}"> </img> </div>
 
+        <audio id="correct1" src="{% static 'correct1.mp3' %}"></audio>
+        <audio id="wrong1" src="{% static 'wrong2.mp3' %}"></audio>
+        <audio id="music" src="{% static 'music1.mp3' %}"></audio>
     </div>
 
     <!-- Timer Script -->
@@ -422,6 +425,9 @@
 
             if (answer_key == user_answer.value) {
                 current_player.scoreNum++;
+                playCorrectAudio();
+            } else {
+                playWrongAudio();
             }
             current_player.scoreVar.textContent = current_player.name + " score: " + current_player.scoreNum;
             question.style.top = RandY() + 'px';
@@ -520,6 +526,8 @@
             moveAI();
             hasGameStarted = true;
             gameIsPaused = false;
+            playMusic();
+
         }
 
         function pauseGame() {
@@ -558,14 +566,13 @@
             if (current_player.name === "AI Player") {
                 let num = Math.floor(Math.random() * 100);
                 if (aiCorrectRate > num) { // ai is right
-                    setTimeout(() => { input.value = eval(math.textContent); }, 500);
+                    setTimeout(() => { input.value = eval(math.textContent); }, 1000);
                 } else {
-                    setTimeout(() => { input.value = RandInt(); }, 500);
+                    setTimeout(() => { input.value = RandInt(); }, 1000);
                 }
-                setTimeout(() => { submit_button.click(); }, 1500); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
+                setTimeout(() => { submit_button.click(); }, 2000); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
             }
         }
-
     </script>
 
     <!-- log player score -->
@@ -599,6 +606,30 @@
                 }
             });
             return cookieValue;
+        }
+    </script>
+
+    <!-- correct/incorrect audio script -->
+    <script>
+        var musicPlayer = document.getElementById("music");
+        var correctPlayer = document.getElementById("correct1");
+        var wrongPlayer = document.getElementById("wrong1");
+        
+        musicPlayer.volume = 0.5;
+        correctPlayer.volume = 1.0;
+        wrongPlayer.volume = 0.2;
+
+        function playMusic() {
+            musicPlayer.play();
+            console.log("music is playing");
+        }
+
+        function playCorrectAudio() {
+            correctPlayer.play();
+        }
+
+        function playWrongAudio() {
+            wrongPlayer.play();
         }
     </script>
 
