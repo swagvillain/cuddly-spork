@@ -12,14 +12,6 @@
 	<link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 
 	<style>
-		body {
-			background-image: url("{% static 'numbers-background.jpg' %}");
-			background-size: cover;
-			background-position: center;
-			background-repeat: no-repeat;
-			background-attachment: fixed;
-		}
-
 		/* The Modal (background) */
 		.modal {
 			display: none;
@@ -46,15 +38,17 @@
 
 		/* Modal Content */
 		.modal-content {
+			font-size: 30px;
 			background-color: #fefefe;
 			margin: auto;
 			padding: 20px;
 			border: 1px solid #888;
-			width: 80%;
+			width: 60%;
 		}
 
 		/* The Close Button */
 		.close {
+			display: none;
 			color: #aaaaaa;
 			float: right;
 			font-size: 28px;
@@ -70,7 +64,7 @@
 	</style>
 </head>
 
-<body onload="speak('Welcome to Speed Racer!')">
+<body onload="speak('Welcome to Speed Racer!')" class="	numbers-background">
 	<main>
 		<div class="transparent-background">
 			<div class="menu">
@@ -84,7 +78,7 @@
 					</li>
 					<li>
 						<button id="rulesButton" class="btn btn-primary">
-							Rules
+							How to Play
 						</button>
 					</li>
 					<li>
@@ -107,14 +101,14 @@
 
 	<!-- The Modal -->
 	<div id="Rules" class="modal">
-
 		<!-- Modal content -->
-		<div class="modal-content">
+		<div>
 			<span class="close">&times;</span>
-			<p>Race your car as fast as you can. If you answer questions correctly, you will get more points and win the
-				game. Player 1 uses WASD to steer. Player 2 uses the arrow keys. Tap your keys to move your car. Reach
-				the Ice Cream first for a chance to answer the question.</p>
-		</div>
+			<div class="modal-content">
+			<p>Race your car to collect ice cream and earn points!<br> If you answer questions correctly, you will get more points and win
+				the game. Player 1 uses WASD keys to control their car. Player 2 uses the arrow keys. <strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong> to move your car.
+				Reach the Ice Cream first for a chance to answer the question.</p>
+		</div></div>
 	</div>
 
 	<!-- Modal Script -->

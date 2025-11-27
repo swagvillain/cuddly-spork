@@ -70,9 +70,9 @@
         <main>
             <div class="top-bar">
                 <h1 style="text-align: center;">Race Time</h1>
-                <div class="score1" id="score1"> Player 1 Score: 0 </div>
-                <div class="score2" id="score2">Player 2 Score: 0</div>
-                <div class="score3" id="score3">AI Player Score: 0</div>
+                <div class="score1" id="score1">Player 1: 0 </div>
+                <div class="score2" id="score2">Player 2: 0</div>
+                <div class="score3" id="score3">QTrobot: 0</div>
                 <button class="btn btn-primary" onclick="pauseGame()">Pause</button>
                 <button class="btn btn-primary" onclick="window.location.href='{% url 'mainmenu' %}';">
                     Exit to Main Menu
@@ -96,7 +96,11 @@
 
             <dialog id="startDialog">
                 <center>
-                    <div> Ready to play the game? </div>
+                    <h1> Ready to play? </h1>
+                    <p>What are your names?</p>
+                    <div class="score1">Player 1: <input id="p1-name-input" type="text" autocomplete="off" maxlength="12"></div>
+                    <div class="score2">Player 2: <input id="p2-name-input" type="text" autocomplete="off" maxlength="12"></div>
+
                     <p>Player 1 will use the arrow keys, and Player 2 will use WASD to move</p>
                     <button class="btn btn-primary" id="startGameBtn" onclick="startGame()"> Start game! </button>
                 </center>
@@ -130,7 +134,7 @@
                     </table>
                     <button class="btn btn-primary" id="goMainMenu" onclick="window.location.href='{% url 'mainmenu' %}';">
                         Quit to main menu </button>
-                    </center>
+                </center>
             </dialog>
 
         </main> 
@@ -143,7 +147,7 @@
 
         <audio id="correct1" src="{% static 'correct1.mp3' %}"></audio>
         <audio id="wrong1" src="{% static 'wrong2.mp3' %}"></audio>
-        <audio id="music" src="{% static 'music1.mp3' %}"></audio>
+        <audio id="music" loop="true" src="{% static 'music1.mp3' %}"></audio>
     </div>
 
     <!-- Timer Script -->
@@ -184,7 +188,7 @@
         let gameIsPaused = true;
 
         let speed = 10;
-        let aiMoveFreq = 300; // time in ms between ai move
+        let aiMoveFreq = 200; // time in ms between ai move
         let aiCorrectRate = 90; // percentage of the time that ai guesses correctly
 
         let rcar = document.getElementById('rcar');
@@ -200,7 +204,7 @@
 
         let p1 = new Player("Player 1", 0, s1, speed);
         let p2 = new Player("Player 2", 0, s2, speed);
-        let ai_player = new Player("AI Player", 0, s3, speed);
+        let ai_player = new Player("AI QTrobot", 0, s3, speed);
         let current_player = null;
 
         let user_answer = document.getElementById("answer");
@@ -429,7 +433,7 @@
             } else {
                 playWrongAudio();
             }
-            current_player.scoreVar.textContent = current_player.name + " score: " + current_player.scoreNum;
+            current_player.scoreVar.textContent = current_player.name + ": " + current_player.scoreNum;
             question.style.top = RandY() + 'px';
             question.style.left = RandX() + 'px';
             questionDialogIsOpen = false;
@@ -528,6 +532,13 @@
             gameIsPaused = false;
             playMusic();
 
+            p1.name = document.getElementById("p1-name-input").value || "Player 1";
+            p2.name = document.getElementById("p2-name-input").value || "Player 2";
+            ai_player.name = "QTrobot";
+
+            p1.scoreVar.textContent = p1.name + ": " + p1.scoreNum;
+            p2.scoreVar.textContent = p2.name + ": " + p2.scoreNum;
+            ai_player.scoreVar.textContent = ai_player.name + ": " + ai_player.scoreNum;
         }
 
         function pauseGame() {
@@ -563,7 +574,7 @@
             math.textContent = RandInt() + "+" + RandInt();
             prompt.textContent = player.name + ", answer the math problem!";
             questionDialog.showModal();
-            if (current_player.name === "AI Player") {
+            if (current_player.name === ai_player.name) {
                 let num = Math.floor(Math.random() * 100);
                 if (aiCorrectRate > num) { // ai is right
                     setTimeout(() => { input.value = eval(math.textContent); }, 1000);
@@ -615,9 +626,9 @@
         var correctPlayer = document.getElementById("correct1");
         var wrongPlayer = document.getElementById("wrong1");
         
-        musicPlayer.volume = 0.5;
+        musicPlayer.volume = 0.4;
         correctPlayer.volume = 1.0;
-        wrongPlayer.volume = 0.2;
+        wrongPlayer.volume = 0.2    ;
 
         function playMusic() {
             musicPlayer.play();

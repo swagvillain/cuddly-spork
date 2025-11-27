@@ -12,14 +12,6 @@
   <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
   <link rel="stylesheet" href="{% static 'style.css'  %}">
   <style>
-    body {
-      background-image: url("{% static 'numbers-background.jpg' %}");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      font-family: 'Comic Neue', sans-serif;
-    }
 
     h1 {
       font-family: "Comic Neue", cursive;
@@ -27,7 +19,8 @@
   </style>
 </head>
 
-<body onload="speak('Welcome to the Game! I am your robot companion. Click the button to continue!')">
+<body onload="speak('Welcome to the Game! I am your robot companion. Click the button to continue!')"
+      class="numbers-background">
   <main>
     <div class="transparent-background">
       <div clss="menu">

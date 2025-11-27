@@ -17,6 +17,20 @@ def mainmenu(request):
 
 def highscores(request):
     scores = ScoreLog.objects.all()[:10]
+    
+    # add a lil logic here
+    last_score = None
+    last_rank = 0
+
+    for idx, item in enumerate(scores, start=1):
+        if item.score == last_score:
+            item.rank = last_rank
+        else: 
+            item.rank = idx
+            last_rank = idx
+
+        last_score = item.score
+
     return render(request, 'myapp/highscores.html', {'scores': scores})
 
 def index(request):
