@@ -21,10 +21,8 @@
         }
 
         .bg {
-            background-image: url("{% static 'black_background.jpg' %}");
-
+            background-image: url("{% static 'grass-bg.jpg' %}");
             height: 100%;
-
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -56,12 +54,10 @@
             /* height: 150px; */
         }
     </style>
-
     <!-- ******* END STLYE ******* -->
 
 
     <!-- ******* BEGIN HTML/CONTENT ******** -->
-
     <title>Speed Racer</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
@@ -140,7 +136,7 @@
         </main> 
 
         <!-- cars and questionbox -->
-        <div class="question_icon"> <img id=question width=35 src="{% static 'question.png' %}"> </img> </div>
+        <div class="question_icon"> <img id=question width=50 src="{% static 'ice-cream.png' %}"> </img> </div>
         <div class="car"> <img id=rcar width=50 src="{% static 'RedCar.png' %}"> </img> </div>
         <div class="car"> <img id=gcar width=50 src="{% static 'GreenCar.png' %}"> </img> </div>
         <div class="car"> <img id=bcar width=50 src="{% static 'BlueCar.png' %}"> </img> </div>
@@ -266,7 +262,11 @@
         // listener for enter key to submit answer
         window.addEventListener('keyup', (e) => {
             if (e.key == 'Escape') {
-                pauseGame();
+                if(!gameIsPaused){
+                    pauseGame();
+                } else {
+                    resumeGame();
+                }
             }
         });
 
