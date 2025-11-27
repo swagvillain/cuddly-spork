@@ -91,21 +91,22 @@ ul {
 /* Button styling */
 button.btn {
   font-family: "Comic Neue", cursive;
-  font-size: 16px;
-  padding: 12px 24px;
-  margin: 10px 0;
+  font-size: 20px;
+  padding: 12px 25px;
+  margin: 8px;
   cursor: pointer;
-  border: 2px solid #2b951a;
-  border-radius: 6px;
-  background-color: #2b951a;
-  color: white;
-  transition: background-color 0.2s, color 0.2s;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 
 /* Hover effect */
 button.btn:hover {
   background-color: white;
-  color: #2b951a;
+  color: black;
 }
 
 /* Optional: active / pressed state */
