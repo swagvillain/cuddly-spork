@@ -1,54 +1,54 @@
 <!DOCTYPE html>
 {% load static %}
 
-<html lang="en"> 
-	<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
-  <head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
-    <title>Speed Racer</title> 
-    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'style.css'  %}">
-    <style>
-	body {
-            background-image: url("{% static 'numbers-background.jpg' %}");
-            background-size: cover;
-	    background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-	    font-family: 'Comic Neue', sans-serif;
-        }
-	h1 {
-    font-family: "Comic Neue", cursive ;
-  }
-    </style>
-  </head>
+<html lang="en">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
 
-  <body onload="speak('Welcome to the Game! I am your robot companion. Click the button to continue!')"> 
-    <main> 
-	    <div class="transparent-background">
-		    <div clss="menu">
-        <h1 style="color:yellow">Welcome to Speed Racer</h1> 
- 	<button
-  	  class="btn btn-primary"
-          onclick="navigateToMainMenu()"
- 	>
-	Continue to Main Menu
-	</button>
-	    </div>	
-	    </div>
-	<script src="{% static 'js/tts.js' %}"></script>
-    </main> 
-    
-    <!-- TTS script -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Speed Racer</title>
+  <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'style.css'  %}">
+  <style>
+    body {
+      background-image: url("{% static 'numbers-background.jpg' %}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: 'Comic Neue', sans-serif;
+    }
+
+    h1 {
+      font-family: "Comic Neue", cursive;
+    }
+  </style>
+</head>
+
+<body onload="speak('Welcome to the Game! I am your robot companion. Click the button to continue!')">
+  <main>
+    <div class="transparent-background">
+      <div clss="menu">
+        <h1 style="color:yellow">Welcome to Speed Racer</h1>
+        <button class="btn btn-primary" onclick="navigateToMainMenu()">
+          Continue to Main Menu
+        </button>
+      </div>
+    </div>
     <script src="{% static 'js/tts.js' %}"></script>
+  </main>
 
-    <!-- Navigation script -->
-    <script>
-    	function navigateToMainMenu(){
-		window.location.href='{% url 'mainmenu' %}';
-	}
-    </script>
-  </body> 
+  <!-- TTS script -->
+  <script src="{% static 'js/tts.js' %}"></script>
+
+  <!-- Navigation script -->
+  <script>
+    function navigateToMainMenu() {
+      window.location.href = '{% url 'mainmenu' %}';
+    }
+  </script>
+</body>
+
 </html>
