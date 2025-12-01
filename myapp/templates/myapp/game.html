@@ -207,7 +207,7 @@
         let ai_player = new Player("AI QTrobot", 0, s3, speed);
         let current_player = null;
 
-        aiMoveFreq = getAISpeed(); // time in ms between ai move
+        aiMoveFreq = 200; // time in ms between ai move
 
         let user_answer = document.getElementById("answer");
         let submit_button = document.getElementById("submit");
@@ -305,8 +305,7 @@
                     if ((parseInt(q_top) + 30) > parseInt(b_bottom)) { // car is too high
                         // console.log("1");
                         if (questionDialogIsOpen == false) {
-                            bcar.style.top = parseInt(bcar.style.top) + speed + 'px';
-                            aiMoveFreq = getAISpeed();
+                            bcar.style.top = parseInt(bcar.style.top) + ai_player.moveSpeed + 'px';
                             bcar.style.transform = "rotate(180deg)";
                             bcar_border = bcar.getBoundingClientRect();
                             q_border = question.getBoundingClientRect();
@@ -318,8 +317,7 @@
                     } else if ((parseInt(q_bottom) - 20) < parseInt(b_top)) { // car is too low
                         // console.log("2");
                         if (questionDialogIsOpen == false) {
-                            bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
-                            aiMoveFreq = getAISpeed();
+                            bcar.style.top = parseInt(bcar.style.top) - ai_player.moveSpeed + 'px';
                             bcar.style.transform = "rotate(0deg)";
                             bcar_border = bcar.getBoundingClientRect();
                             q_border = question.getBoundingClientRect();
@@ -331,8 +329,7 @@
                     } else if (parseInt(question.style.left) > parseInt(bcar.style.left)) {
                         // console.log("3");
                         if (questionDialogIsOpen == false) {
-                            bcar.style.left = parseInt(bcar.style.left) + speed + 'px';
-                            aiMoveFreq = getAISpeed();
+                            bcar.style.left = parseInt(bcar.style.left) + ai_player.moveSpeed + 'px';
                             bcar.style.transform = "rotate(90deg)";
                             bcar_border = bcar.getBoundingClientRect();
                             q_border = question.getBoundingClientRect();
@@ -344,8 +341,7 @@
                     } else if (parseInt(question.style.left) < parseInt(bcar.style.left)) {
                         // console.log("4");
                         if (questionDialogIsOpen == false) {
-                            bcar.style.left = parseInt(bcar.style.left) - speed + 'px';
-                            aiMoveFreq = getAISpeed();
+                            bcar.style.left = parseInt(bcar.style.left) - ai_player.moveSpeed + 'px';
                             bcar.style.transform = "rotate(270deg)";
                             bcar_border = bcar.getBoundingClientRect();
                             q_border = question.getBoundingClientRect();
@@ -357,8 +353,7 @@
                     } else {
                         // console.log("5");
                         if (questionDialogIsOpen == false) {
-                            bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
-                            aiMoveFreq = getAISpeed();
+                            bcar.style.top = parseInt(bcar.style.top) - ai_player.moveSpeed + 'px';
                             bcar.style.transform = "rotate(0deg)";
                             bcar_border = bcar.getBoundingClientRect();
                             q_border = question.getBoundingClientRect();
@@ -441,7 +436,7 @@
                 playWrongAudio();
             }
             current_player.scoreVar.textContent = current_player.name + ": " + current_player.scoreNum;
-            aiMoveFreq = getAISpeed();
+            setAISpeed();
             question.style.top = RandY() + 'px';
             question.style.left = RandX() + 'px';
             questionDialogIsOpen = false;
@@ -592,9 +587,11 @@
                 }
                 setTimeout(() => { submit_button.click(); }, 2000); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
             }
-            aiMoveFreq = getAISpeed();
         }
 
+
+        //getAISpeed does not work. Use setAISpeed instead to scale AI speed
+        /*
         function getAISpeed(){
             if (ai_player.scoreNum == 0){
                 return 200;
@@ -604,6 +601,15 @@
                 return 2000;
             }
             //return ( (10000 * Math.max( (ai_player.scoreNum - Math.min(p1.scoreNum, p2.scoreNum ), 0 )) + 200 )
+        }
+        */
+
+        function setAISpeed(){
+            human_min = Math.min(p1.scoreNum, p2.scoreNum); // choose worst player
+            diff = ai_player.scoreNum - human_min;
+            diff = Math.max(diff, 0); // No -'ves
+            newSpeed = 10 - diff;
+            ai_player.moveSpeed = Math.max(newSpeed, 4) // No less than 4px per translational movement
         }
 
         function getAIAcc(){
