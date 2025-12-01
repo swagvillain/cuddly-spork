@@ -1,5 +1,5 @@
 # ignore gitignore itself
-.gitignore
+# .gitignore
 
 # ignore todo list
 todo.md
@@ -10,3 +10,6 @@ myenv/
 # ignore SQLite database
 db.sqlite3
 
+# ignore cached python files
+*.pyc
+__pycache__/
