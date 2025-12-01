@@ -102,24 +102,23 @@
 	<!-- The Modal -->
 	<div id="Rules" class="modal">
 		<!-- Modal content -->
-		<div>
-			<span class="close">&times;</span>
+			
 			<div class="modal-content">
-				<div class="slideshow-container">
+				<span class="close">&times;</span>
+
+				<div class="slideshow-container" style="width: 800px;">
 
                         <div class="mySlides">
                             <div class="numbertext">1 / 3</div>
-                            <img src="{% static 'RedCar.png' %}" style="height: 170px">
-                            <img src="{% static 'BlueCar.png' %}" style="height: 170px;">
-                            <img src="{% static 'GreenCar.png' %}" style="height: 170px;"><br>
+                            <img src="{% static 'RedCar.png' %}" style="height: 200px">
+                            <img src="{% static 'BlueCar.png' %}" style="height: 200px;">
+                            <img src="{% static 'GreenCar.png' %}" style="height: 200px;"><br><br>
                             <span style="color:red"> Player 1</span> uses the <span style="color:red"> arrow keys
-                            </span> to
-                            control the <span style="color:red">
-                                red car</span>.<br>
-                            <span style="color: blue;">Player 2</span> uses the <span style="color: blue;">WASD keys
-                            </span> to
-                            control the <span style="color:blue"> blue
-                                car</span>.<br>
+                            </span> to control the <span style="color:red"> red car</span>.<br>
+                            
+							<span style="color: blue;">Player 2</span> uses the <span style="color: blue;">WASD keys
+                            </span> to control the <span style="color:blue"> blue car</span>.<br>
+
                             <span style="color: green;">QTrobot</span> controls the <span style="color:green"> green
                                 car</span>.
                         </div>
@@ -127,15 +126,16 @@
                         <div class="mySlides">
                             <div class="numbertext">2 / 3</div>
                             <img src="{% static 'ice-cream.png' %}" style="height:200px"><br>
-                            <span><strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong>
+                            <p><span><strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong>
                                 to move your car. Reach the Ice Cream first for a chance to answer a math question.
                                 Answer correctly to get a
                                 point.</span>
+							</p>
                         </div>
 
                         <div class="mySlides">
                             <div class="numbertext">3 / 3</div>
-                            <img src="{% static 'crown.png' %}" style="height:200px"><br>
+                            <img src="{% static 'crown.png' %}" style="height:200px"><br><br>
                             <p>Whoever has the most points after 1 minute wins!</p>
                         </div>
 
@@ -144,7 +144,6 @@
 
                     </div>
 			</div>
-		</div>
 	</div>
 
 	<!-- Modal Script -->
