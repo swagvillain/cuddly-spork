@@ -6,7 +6,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Speed Racer</title>
+	<title>Math Zoomers</title>
 	<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="{% static 'style.css'  %}">
 	<link rel="icon" href="/static/favicon.ico" type="image/x-icon">
@@ -64,11 +64,11 @@
 	</style>
 </head>
 
-<body onload="speak('Welcome to Speed Racer!')" class="	numbers-background">
+<body onload="speak('Welcome to Math Zoomers!')" class="	numbers-background">
 	<main>
 		<div class="transparent-background">
 			<div class="menu">
-				<h1 style="color:yellow">Main Menu</h1>
+				<h1>Main Menu</h1>
 				<ul>
 					<li>
 						<button class="btn btn-primary" onclick="window.location.href='{% url 'game' %}';"
@@ -83,7 +83,7 @@
 					</li>
 					<li>
 						<button class="btn btn-primary" onclick="window.location.href='{% url 'highscores' %}';"
-							onmouseover="speak('')">
+							onmouseover="speak('high scores')">
 							High Scores
 						</button>
 					</li>
