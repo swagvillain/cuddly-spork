@@ -582,6 +582,7 @@
             math.textContent = RandInt() + "+" + RandInt();
             prompt.textContent = player.name + ", answer the math problem!";
             questionDialog.showModal();
+            aiCorrectRate = getAIAcc() * 100;
             if (current_player.name === ai_player.name) {
                 let num = Math.floor(Math.random() * 100);
                 if (aiCorrectRate > num) { // ai is right
@@ -603,6 +604,15 @@
                 return 2000;
             }
             //return ( (10000 * Math.max( (ai_player.scoreNum - Math.min(p1.scoreNum, p2.scoreNum ), 0 )) + 200 )
+        }
+
+        function getAIAcc(){
+            
+            human_min = Math.min(p1.scoreNum, p2.scoreNum); // choose worst player
+            diff = ai_player.scoreNum - human_min;
+            diff = Math.max(diff, 0); // No negative numbers
+            acc = (10 - diff) / 10;
+            return (Math.max(acc, 0.4)) // No worse than 40% chance
         }
 
     </script>
