@@ -1,166 +1,336 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-<!-- ******* BEGIN STLYE ******* -->
+    <!-- ******* BEGIN STLYE ******* -->
     <style>
-    body, html {
-        height: 100%;
-        margin: 0;
-        overflow: hidden
-    }
-    
-    h1 {
-	    color: white;
-    }
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden
+        }
 
-    .bg {
-        background-image: url("{% static 'black_background.jpg' %}");
+        h1 {
+            color: white;
+        }
 
-        height: 100%;
+        .bg {
+            background-image: url("{% static 'grass-bg.jpg' %}");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
 
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
+        .car {
+            height: 10px;
+            width: 10px;
+        }
 
-    .car {
-        height: 10px;
-        width: 10px;
-    }
+        .redCar {
+            height: 10px;
+            width: 10px;
+        }
 
-    .redCar {
-        height: 10px;
-        width: 10px;
-    }
+        .greenCar {
+            height: 10px;
+            width: 10px;
+        }
 
-    .greenCar{
-        height: 10px;
-        width: 10px;
-    }
+        .question_icon {
+            height: 20px;
+            width: 20px;
+        }
 
-    .question_icon {
-        height: 20px;
-        width: 20px;
-    }
-
-    dialog {
-        position: absolute;
-        align-items: center;
-        height: 100px;
-    }
+        dialog {
+            position: absolute;
+            align-items: center;
+            /* height: 150px; */
+        }
     </style>
+    <!-- ******* END STLYE ******* -->
 
-<!-- ******* END STLYE ******* -->
 
-
-<!-- ******* BEGIN HTML/CONTENT ******** -->
- 
+    <!-- ******* BEGIN HTML/CONTENT ******** -->
     <title>Speed Racer</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-  </head>
-  <body onload="speak('Let\'s go')">
+</head>
+
+<body style="--bar-height: 150px" class="bg" onload="speak('Let\'s go')">
 
     <div class="bg">
 
         <main>
-        <h1 style="text-align: center;">Race Time</h1>  
-	<br>
-	<div class="score1" id="score1"> Player 1 Score: 0 </div>
-        <br>
-        <div class="score2" id="score2">Player 2 Score: 0</div>
-	<br>
-        <div class="score3" id="score3">AI Player Score: 0</div>
+            <div class="top-bar">
+                <h1 style="text-align: center;">Race Time</h1>
+                <div class="score1" id="score1">Player 1: 0 </div>
+                <div class="score2" id="score2">Player 2: 0</div>
+                <div class="score3" id="score3">QTrobot: 0</div>
+                <button class="btn btn-primary" onclick="pauseGame()">Pause</button>
+                <button class="btn btn-primary" onclick="window.location.href='{% url 'mainmenu' %}';">
+                    Exit to Main Menu
+                </button>
+                <p id="main-countdown">60</p>
+            </div>
 
-        
-        <dialog id = "dialog">
+            <dialog id="dialog">
                 <center>
-                <div id = "prompt"> Answer The Math Problem! </div>
+                    <div id="prompt"> Answer The Math Problem! </div>
 
-                <div id="math"> Math Question</div>
+                    <div id="math"> Math Question</div>
 
-		<input id="answer" type="text" autocomplete="off">
-                <br>
-                <br>
-                <button id="submit"> Submit Answer </button>
+                    <input id="answer" type="text" autocomplete="off">
+                    <br>
+                    <br>
+                    <button class="btn" id="submit"> Submit Answer </button>
                 </center>
-                
-        </dialog>
 
-        <br>
-        <button
-                class="btn btn-primary"
-                onclick="window.location.href='{% url 'mainmenu' %}';"
-        >
-	Exit to Main Menu
-        </button>
+            </dialog>
 
-        <p id="main-countdown"></p>
-    </main>
+            <dialog id="startDialog">
+                <center>
+                    <h1> Ready to play? </h1>
+                    <p>What are your names?</p>
+                    <div class="score1">Player 1: <input id="p1-name-input" type="text" autocomplete="off"
+                            maxlength="12"></div>
+                    <div class="score2">Player 2: <input id="p2-name-input" type="text" autocomplete="off"
+                            maxlength="12"></div>
 
-    <div class = "question_icon"> <img id = question width = 35 src="{% static 'question.png' %}"> </img> </div>
+                    <p>Player 1 will use the arrow keys, and Player 2 will use WASD to move</p>
+                    <button class="btn btn-primary" id="startGameBtn" onclick="startGame()"> Start game! </button>
+                </center>
 
-    <div class = "car"> <img id = rcar width = 50 src="{% static 'RedCar.png' %}"> </img> </div>
-    <div class = "car"> <img id = gcar width = 50 src="{% static 'GreenCar.png' %}"> </img> </div>
-    <div class = "car"> <img id = bcar width = 50 src="{% static 'BlueCar.png' %}"> </img> </div>
+            </dialog>
 
+            <dialog id="pauseDialog">
+                <center>
+                    <H1 style="color:green"> Game is paused </H1>
+                    <button class="btn btn-primary" id="goMainMenu"
+                        onclick="window.location.href='{% url 'mainmenu' %}';">
+                        Quit to main menu </button>
+                    <button class="btn btn-primary" id="rulesButton" onclick="showRulesDialog()">How to Play</button>
+                    <button class="btn btn-primary" id="resumeGame" onclick="resumeGame()"> Resume game </button>
+                </center>
+            </dialog>
+
+            <dialog id="gameOver">
+                <center>
+                    <H1 style="color:green"> Game is Over </H1>
+                    <p>Here are the scores:</p>
+                    <table border="1" cellpadding="5" cellspacing="0" style="color:yellow">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gameOverBody">
+                        </tbody>
+                    </table>
+                    <button class="btn btn-primary" id="goMainMenu"
+                        onclick="window.location.href='{% url 'mainmenu' %}';">
+                        Quit to main menu </button>
+                </center>
+            </dialog>
+
+            <dialog id="rulesDialog">
+                <center>
+                    <div class="slideshow-container">
+
+                        <div class="mySlides">
+                            <div class="numbertext">1 / 3</div>
+                            <img src="{% static 'RedCar.png' %}" style="height: 170px">
+                            <img src="{% static 'BlueCar.png' %}" style="height: 170px;">
+                            <img src="{% static 'GreenCar.png' %}" style="height: 170px;"><br>
+                            <span style="color:red"> Player 1</span> uses the <span style="color:red"> arrow keys
+                            </span> to
+                            control the <span style="color:red">
+                                red car</span>.<br>
+                            <span style="color: blue;">Player 2</span> uses the <span style="color: blue;">WASD keys
+                            </span> to
+                            control the <span style="color:blue"> blue
+                                car</span>.<br>
+                            <span style="color: green;">QTrobot</span> controls the <span style="color:green"> green
+                                car</span>.
+                        </div>
+
+                        <div class="mySlides">
+                            <div class="numbertext">2 / 3</div>
+                            <img src="{% static 'ice-cream.png' %}" style="height:200px"><br>
+                            <span><strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong>
+                                to move your car. Reach the Ice Cream first for a chance to answer a math question.
+                                Answer correctly to get a
+                                point.</span>
+                        </div>
+
+                        <div class="mySlides">
+                            <div class="numbertext">3 / 3</div>
+                            <img src="{% static 'crown.png' %}" style="height:200px"><br>
+                            <p>Whoever has the most points after 1 minute wins!</p>
+                        </div>
+
+                        <a class="prev" onclick="plusSlides(-1)">❮</a>
+                        <a class="next" onclick="plusSlides(1)">❯</a>
+
+                    </div>
+
+
+                    <div style="text-align:center">
+                        <span class="dot" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                        <span class="dot" onclick="currentSlide(3)"></span>
+                    </div>
+
+
+                    <button class="btn btn-primary" onclick="closeRules()">Close Rules</button>
+                </center>
+            </dialog>
+
+        </main>
+
+        <!-- cars and questionbox -->
+        <div class="question_icon"> <img id=question width=50 src="{% static 'ice-cream.png' %}"> </img> </div>
+        <div class="car"> <img id=rcar width=50 src="{% static 'RedCar.png' %}"> </img> </div>
+        <div class="car"> <img id=gcar width=50 src="{% static 'GreenCar.png' %}"> </img> </div>
+        <div class="car"> <img id=bcar width=50 src="{% static 'BlueCar.png' %}"> </img> </div>
+
+        <audio id="correct1" src="{% static 'correct1.mp3' %}"></audio>
+        <audio id="wrong1" src="{% static 'wrong2.mp3' %}"></audio>
+        <audio id="music" loop="true" src="{% static 'music1.mp3' %}"></audio>
     </div>
+
+    <!-- slideshow script -->
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+    </script>
 
     <!-- Timer Script -->
     <script>
-	    var mainTimerDuration = 60;
-	    var timeLeft;
-	
-	    function startMainTimer(){
-		timeLeft = mainTimerDuration;
-  	        var x = setInterval(function() {
-		    if(timeLeft < 1){
-		        clearInterval(x);
-			document.getElementById("main-countdown").innerHTML = "Game Over";
-		    } else {
-	     		document.getElementById("main-countdown").innerHTML = timeLeft;
-			timeLeft --;
-		    }
-	    }, 1000);
-	    }
+        var mainTimerDuration = 59;
+        var timeLeft;
+
+        function startMainTimer() {
+            timeLeft = mainTimerDuration;
+            var x = setInterval(function () {
+                if (!questionDialogIsOpen && !gameIsPaused) {
+
+                    if (timeLeft < 1) {
+                        clearInterval(x);
+                        document.getElementById("main-countdown").innerHTML = "Game Over";
+                        gameOver();
+                    } else {
+                        document.getElementById("main-countdown").innerHTML = timeLeft;
+                        timeLeft--;
+                    }
+                }
+            }, 1000);
+        }
     </script>
 
+    <!-- modal/rules script  -->
+    <script>
+        // var modal = document.getElementById("rulesDialog");
+
+        // // Get the button that opens the modal
+        // var btn = document.getElementById("rulesButton");
+        // btn.addEventListener('mouseover', () => {
+        //     speak('Do you know how to play?');
+        // });
+
+        // btn.addEventListener('click', () => {
+        //     speak('Player 1 uses the arrow keys to control the red car. Player 2 uses the WASD keys to control the blue car. I control the green car. Tap your keys rapidly to move your car. Reach the Ice Cream first for a chance to answer a math question. Answer correctly to get a point. Whoever has the most points after 1 minute wins!');
+        // });
+
+        // // Get the <span> element that closes the modal
+        // var span = document.getElementsByClassName("close")[0];
+
+        // // When the user clicks the button, open the modal
+        // btn.addEventListener('click', () => {
+        //     modal.style.display = "block";
+        // });
+
+        // // When the user clicks on <span> (x), close the modal
+        // span.onclick = function () {
+        //     modal.style.display = "none";
+        // }
+
+        // modal.onclick = function () {
+        //     modal.style.display = "none";
+        // }
+
+        // // When the user clicks anywhere outside of the modal, close it
+        // window.onclick = function (event) {
+        //     if (event.target == modal) {
+        //         modal.style.display = "none";
+        //     }
+        // }
+    </script>
+
+    <!-- Everything Script-->
     <script>
 
-	function Player(name, scoreNum, scoreVar, moveSpeed){
-	    this.name = name;
-	    this.scoreNum = scoreNum;
-	    this.scoreVar = scoreVar;
-	    this.moveSpeed = moveSpeed;
-	}
+        function Player(name, scoreNum, scoreVar, moveSpeed) {
+            this.name = name;
+            this.scoreNum = scoreNum;
+            this.scoreVar = scoreVar;
+            this.moveSpeed = moveSpeed;
+        }
+
+        let hasGameStarted = false;
+        let startDialogIsOpen = true;
+        let gameIsPaused = true;
 
         let speed = 10;
-	let aiMoveFreq = 10; // time in ms between ai move
-	let aiCorrectRate = 90; // percentage of the time that ai guesses correctly
+        let aiMoveFreq = 200; // time in ms between ai move
+        let aiCorrectRate = 90; // percentage of the time that ai guesses correctly
 
         let rcar = document.getElementById('rcar');
         let gcar = document.getElementById('gcar');
-	let bcar = document.getElementById('bcar');	
-	
+        let bcar = document.getElementById('bcar');
+
         let question = document.getElementById('question');
 
         let s1 = document.getElementById("score1");
         let s2 = document.getElementById("score2");
-	let s3 = document.getElementById("score3");
+        let s3 = document.getElementById("score3");
 
-        let p1_score = 0;
-        let p2_score = 0;
-	let ai_score = 0;
-	
-	let p1 = new Player("Player 1", p1_score, s1, speed);
-	let p2 = new Player("Player 2", p2_score, s2, speed);
-	let ai_player = new Player("AI Player", ai_score, s3, speed);
-	let current_player = null;
+
+        let p1 = new Player("Player 1", 0, s1, speed);
+        let p2 = new Player("Player 2", 0, s2, speed);
+        let ai_player = new Player("AI QTrobot", 0, s3, speed);
+        let current_player = null;
 
         let user_answer = document.getElementById("answer");
         let submit_button = document.getElementById("submit");
@@ -169,324 +339,458 @@
 
         let car_border = rcar.getBoundingClientRect();
         let gcar_border = gcar.getBoundingClientRect();
-	// let bcar_border = bcar.getBoudingClientRect();
+        // let bcar_border = bcar.getBoudingClientRect();
 
         let q_border = question.getBoundingClientRect();
-        
-        let dialog = document.getElementById("dialog");
-        //let gdialog = document.getElementById("dialog2");
-        let box_open = false;
 
-	// initial locations of cars, q-box upon load
+        // dialog declarations
+        let pauseDialog = document.getElementById("pauseDialog");
+        let startDialog = document.getElementById("startDialog");
+        let questionDialog = document.getElementById("dialog");
+        let gameOverDialog = document.getElementById("gameOver");
+        let rulesDialog = document.getElementById("rulesDialog");
+
+        let questionDialogIsOpen = false;
+
+        let wHeight = window.innerHeight;
+        let wWidth = window.innerWidth;
+
+        // initial locations of cars, q-box upon load
         window.addEventListener('load', () => {
-                rcar.style.position = 'absolute';
-                rcar.style.left = 400 + 'px';
-                rcar.style.top = 200 + 'px';
-                rcar.style.transform = 'rotate(90deg)';
+            rcar.style.position = 'absolute';
+            rcar.style.left = wWidth / 2 - 250 + 'px';
+            rcar.style.top = wHeight / 2 + 150 + 'px';
+            rcar.style.transform = 'rotate(90deg)';
 
-                gcar.style.position = 'absolute';
-                gcar.style.left = 400 + "px";
-                gcar.style.top = 600 + "px";
-                gcar.style.transform = 'rotate(90deg)';
+            gcar.style.position = 'absolute';
+            gcar.style.left = wWidth / 2 - 250 + 'px';
+            gcar.style.top = wHeight / 2 - 150 + 'px';
+            gcar.style.transform = 'rotate(90deg)';
 
-		bcar.style.position = 'absolute';
-		bcar.style.left = 1000 + 'px';
-		bcar.style.top = 600 + 'px';
-		bcar.style.transform = 'rotate(270deg)';
+            bcar.style.position = 'absolute';
+            bcar.style.left = wWidth / 2 + 260 + 'px';
+            bcar.style.top = wHeight / 2 + 150 + 'px';
+            bcar.style.transform = 'rotate(270deg)';
 
-                question.style.position = 'absolute';
-                question.style.top = 400 + 'px';
-                question.style.left = 700 + 'px';
-                question.style.padding = 0;
-                question.style.border = 0;
-                question.style.margin = 0;
-		startMainTimer();
-		moveAI();
+            question.style.position = 'absolute';
+            question.style.top = wHeight / 2 + 'px';
+            question.style.left = wWidth / 2 + 'px';
+            question.style.padding = 0;
+            question.style.border = 0;
+            question.style.margin = 0;
+
+            startDialog.showModal();
         });
 
-	// listener for enter key to submit answer
-	window.addEventListener('keyup', (e) => {
-		if(e.key == 'Enter'){
-			submit_button.click();
-		}
-	});
-
-	// ai movement
-	function moveAI(){
-		var needGoUp = false;
-		var needGoDown = false;
-		var needGoLeft = false;
-		var needGoRight = false;
-		let q_border = question.getBoundingClientRect();
-		let q_bottom = q_border.bottom;
-		let q_top = q_border.top;
-		let b_border = bcar.getBoundingClientRect();
-		let b_bottom = b_border.bottom;
-		let b_top = b_border.top;
-		
-		var targetY = question.style.top;
-		var targetX = question.style.left;
-
-		var x = setInterval( function() {
-			let q_border = question.getBoundingClientRect();
-			let q_bottom = q_border.bottom;
-			let q_top = q_border.top;
-			let b_border = bcar.getBoundingClientRect();
-			let b_bottom = b_border.bottom;
-			let b_top = b_border.top;
-			
-			if ((parseInt(q_top)+30) > parseInt(b_bottom)){ // car is too high
-				console.log("1");
-				if(box_open == false){
-					bcar.style.top = parseInt(bcar.style.top) + speed + 'px';
-					bcar.style.transform = "rotate(180deg)";
-					bcar_border = bcar.getBoundingClientRect();
-					q_border = question.getBoundingClientRect();
-
-					if(isColliding(bcar_border, q_border)){
-						mathDialog(ai_player);
-					}
-				}
-			} else 	if ((parseInt(q_bottom)-20) < parseInt(b_top)){ // car is too low
-				console.log("2");
-				if(box_open == false){
-					bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
-					bcar.style.transform = "rotate(0deg)";
-					bcar_border = bcar.getBoundingClientRect();
-					q_border = question.getBoundingClientRect();
-
-					if(isColliding(bcar_border, q_border)){
-						mathDialog(ai_player);
-					}
-				}
-			} else 	if (parseInt(question.style.left) > parseInt(bcar.style.left)){
-					console.log("3");
-			if(box_open == false){
-					bcar.style.left = parseInt(bcar.style.left) + speed + 'px';
-					bcar.style.transform = "rotate(90deg)";
-					bcar_border = bcar.getBoundingClientRect();
-					q_border = question.getBoundingClientRect();
-
-					if(isColliding(bcar_border, q_border)){
-						mathDialog(ai_player);
-					}
-				}
-			} else	if (parseInt(question.style.left) < parseInt(bcar.style.left)){
-						console.log("4");
-		if(box_open == false){
-					bcar.style.left = parseInt(bcar.style.left) - speed + 'px';
-					bcar.style.transform = "rotate(270deg)";
-					bcar_border = bcar.getBoundingClientRect();
-					q_border = question.getBoundingClientRect();
-
-					if(isColliding(bcar_border, q_border)){
-						mathDialog(ai_player);
-					}
-				}
-			} else {
-				console.log("5");
-                                if(box_open == false){
-                                        bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
-                                        bcar.style.transform = "rotate(0deg)";
-                                        bcar_border = bcar.getBoundingClientRect();
-                                        q_border = question.getBoundingClientRect();
-
-                                        if(isColliding(bcar_border, q_border)){
-                                                mathDialog(ai_player);
-                                        }
-                                }
-
-			}
-		}, aiMoveFreq);
-	}
-
-
-	// Player 2 Green listener
+        // listener for enter key to submit answer
         window.addEventListener('keyup', (e) => {
-
-                switch (e.key){
-                        case 'd':
-                                if(box_open == false){
-                                        gcar.style.left = parseInt(gcar.style.left) + speed + 'px';
-                                        gcar.style.transform = "rotate(90deg)";
-                                        gcar_border = gcar.getBoundingClientRect();
-                                        q_border = question.getBoundingClientRect();
-
-                                        if(isColliding(gcar_border, q_border)){
-                                       		mathDialog(p2); 
-					}
-					break;
-                                }
-                        
-                        case 'a':
-                                if(box_open == false){
-                                        gcar.style.left = parseInt(gcar.style.left) - speed + 'px';
-                                        gcar.style.transform = "rotate(-90deg)";
-                                        gcar_border = gcar.getBoundingClientRect();
-                                        q_border = question.getBoundingClientRect();
-
-      					if(isColliding(gcar_border, q_border)){
-						mathDialog(p2);
-                               		}
-                                	break;
-                                }
-
-                        case 'w':
-                                if(box_open == false){
-                                        gcar.style.top = parseInt(gcar.style.top) - speed + 'px';
-                                        gcar.style.transform = "rotate(0deg)";
-                                        gcar_border = gcar.getBoundingClientRect();
-                                        q_border = question.getBoundingClientRect();
-
-					if(isColliding(gcar_border, q_border)){
-						mathDialog(p2);
-                               		}
-                                	break;
-                                }
-
-                        case 's':
-                                if(box_open == false){
-
-                                        gcar.style.top = parseInt(gcar.style.top) + speed + 'px';
-                                        gcar.style.transform = "rotate(180deg)";
-                                        gcar_border = gcar.getBoundingClientRect();
-                                        q_border = question.getBoundingClientRect();
-
-					if(isColliding(gcar_border, q_border)){
-					    mathDialog(p2);
-                                	}	
-                                break;
-                                }
-                }
+            if (e.key == 'Enter') {
+                submit_button.click();
+            }
         });
 
-	// just 1 eventListener for incrementing score
-     	submit_button.addEventListener("click", () => {
-		if(!current_player)
-			return;
-
-		dialog.close();
-		let answer_key = eval(math.textContent);
-
-		if(answer_key == user_answer.value){
-		current_player.scoreNum ++;
-		}
-		current_player.scoreVar.textContent = current_player.name + " score: " + current_player.scoreNum;
-		question.style.top = RandY() + 'px';
-		question.style.left = RandX() + 'px';
-		box_open = false;
-		current_player = null;
-		user_answer.value = "";
-	});
-
-	// Player 1, red car control listener
+        // listener for enter key to submit answer
         window.addEventListener('keyup', (e) => {
-
-                switch (e.key){
-                        case 'ArrowRight':
-                                if(box_open == false){
-                                rcar.style.left = parseInt(rcar.style.left) + speed + 'px';
-                                rcar.style.transform = "rotate(90deg)";
-                                car_border = rcar.getBoundingClientRect();
-                                q_border = question.getBoundingClientRect();
-                                
-				if(isColliding(car_border, q_border)){
-				    mathDialog(p1);
-                                }
-                                break;
-                                }
-                        case 'ArrowLeft':
-                                if(box_open == false){
-                                rcar.style.left = parseInt(rcar.style.left) - speed + 'px';
-                                rcar.style.transform = "rotate(-90deg)";
-                                car_border = rcar.getBoundingClientRect();
-                                q_border = question.getBoundingClientRect();
-                                
-				if(isColliding(car_border, q_border)){
-				    mathDialog(p1);
-                                }
-                                break;
-                                }
-
-                        case 'ArrowUp':
-                                if(box_open == false){
-                                rcar.style.top = parseInt(rcar.style.top) - speed + 'px';
-                                rcar.style.transform = "rotate(0deg)";
-                                car_border = rcar.getBoundingClientRect();
-                                q_border = question.getBoundingClientRect();
-
-				if(isColliding(car_border, q_border)){
-                                    mathDialog(p1);
-				}
-                                break;
-                                }
-
-                        case 'ArrowDown':
-                                if(box_open == false){
-                                rcar.style.top = parseInt(rcar.style.top) + speed + 'px';
-                                rcar.style.transform = "rotate(180deg)";
-                                car_border = rcar.getBoundingClientRect();
-                                q_border = question.getBoundingClientRect();
-				
-				if(isColliding(car_border, q_border)){
-                                    mathDialog(p1);
-				}
-                                break;
-                       		}
+            if (e.key == 'Escape') {
+                if (!gameIsPaused) {
+                    pauseGame();
+                } else {
+                    resumeGame();
                 }
+            }
         });
 
-        function RandInt(){
+        // ai movement
+        function moveAI() {
+            var needGoUp = false;
+            var needGoDown = false;
+            var needGoLeft = false;
+            var needGoRight = false;
+            let q_border = question.getBoundingClientRect();
+            let q_bottom = q_border.bottom;
+            let q_top = q_border.top;
+            let b_border = bcar.getBoundingClientRect();
+            let b_bottom = b_border.bottom;
+            let b_top = b_border.top;
+
+            var targetY = question.style.top;
+            var targetX = question.style.left;
+
+            var x = setInterval(function () {
+                let q_border = question.getBoundingClientRect();
+                let q_bottom = q_border.bottom;
+                let q_top = q_border.top;
+                let b_border = bcar.getBoundingClientRect();
+                let b_bottom = b_border.bottom;
+                let b_top = b_border.top;
+
+                if (!questionDialogIsOpen && !gameIsPaused) {
+
+                    if ((parseInt(q_top) + 30) > parseInt(b_bottom)) { // car is too high
+                        // console.log("1");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.top = parseInt(bcar.style.top) + speed + 'px';
+                            bcar.style.transform = "rotate(180deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
+
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
+                        }
+                    } else if ((parseInt(q_bottom) - 20) < parseInt(b_top)) { // car is too low
+                        // console.log("2");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
+                            bcar.style.transform = "rotate(0deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
+
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
+                        }
+                    } else if (parseInt(question.style.left) > parseInt(bcar.style.left)) {
+                        // console.log("3");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.left = parseInt(bcar.style.left) + speed + 'px';
+                            bcar.style.transform = "rotate(90deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
+
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
+                        }
+                    } else if (parseInt(question.style.left) < parseInt(bcar.style.left)) {
+                        // console.log("4");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.left = parseInt(bcar.style.left) - speed + 'px';
+                            bcar.style.transform = "rotate(270deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
+
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
+                        }
+                    } else {
+                        // console.log("5");
+                        if (questionDialogIsOpen == false) {
+                            bcar.style.top = parseInt(bcar.style.top) - speed + 'px';
+                            bcar.style.transform = "rotate(0deg)";
+                            bcar_border = bcar.getBoundingClientRect();
+                            q_border = question.getBoundingClientRect();
+
+                            if (isColliding(bcar_border, q_border)) {
+                                openQuestionDialog(ai_player);
+                            }
+                        }
+
+                    }
+                }
+            }, aiMoveFreq);
+        }
+
+
+        // Player 2 Green listener
+        window.addEventListener('keyup', (e) => {
+            if (!questionDialogIsOpen && !gameIsPaused) {
+                switch (e.key) {
+                    case 'd':
+                        gcar.style.left = parseInt(gcar.style.left) + speed + 'px';
+                        gcar.style.transform = "rotate(90deg)";
+                        gcar_border = gcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(gcar_border, q_border)) {
+                            openQuestionDialog(p2);
+                        }
+                        break;
+
+                    case 'a':
+                        gcar.style.left = parseInt(gcar.style.left) - speed + 'px';
+                        gcar.style.transform = "rotate(-90deg)";
+                        gcar_border = gcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(gcar_border, q_border)) {
+                            openQuestionDialog(p2);
+                        }
+                        break;
+
+                    case 'w':
+                        gcar.style.top = parseInt(gcar.style.top) - speed + 'px';
+                        gcar.style.transform = "rotate(0deg)";
+                        gcar_border = gcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(gcar_border, q_border)) {
+                            openQuestionDialog(p2);
+                        }
+                        break;
+
+                    case 's':
+
+                        gcar.style.top = parseInt(gcar.style.top) + speed + 'px';
+                        gcar.style.transform = "rotate(180deg)";
+                        gcar_border = gcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(gcar_border, q_border)) {
+                            openQuestionDialog(p2);
+                        }
+                        break;
+                }
+            }
+        });
+
+        // just 1 eventListener for incrementing score
+        submit_button.addEventListener("click", () => {
+            if (!current_player)
+                return;
+
+            questionDialog.close();
+            let answer_key = eval(math.textContent);
+
+            if (answer_key == user_answer.value) {
+                current_player.scoreNum++;
+                playCorrectAudio();
+            } else {
+                playWrongAudio();
+            }
+            current_player.scoreVar.textContent = current_player.name + ": " + current_player.scoreNum;
+            question.style.top = RandY() + 'px';
+            question.style.left = RandX() + 'px';
+            questionDialogIsOpen = false;
+            current_player = null;
+            user_answer.value = "";
+        });
+
+        // Player 1, red car control listener
+        window.addEventListener('keyup', (e) => {
+            if (!questionDialogIsOpen && !gameIsPaused) {
+
+                switch (e.key) {
+                    case 'ArrowRight':
+                        rcar.style.left = parseInt(rcar.style.left) + speed + 'px';
+                        rcar.style.transform = "rotate(90deg)";
+                        car_border = rcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(car_border, q_border)) {
+                            openQuestionDialog(p1);
+                        }
+                        break;
+                    case 'ArrowLeft':
+                        rcar.style.left = parseInt(rcar.style.left) - speed + 'px';
+                        rcar.style.transform = "rotate(-90deg)";
+                        car_border = rcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(car_border, q_border)) {
+                            openQuestionDialog(p1);
+                        }
+                        break;
+
+                    case 'ArrowUp':
+                        rcar.style.top = parseInt(rcar.style.top) - speed + 'px';
+                        rcar.style.transform = "rotate(0deg)";
+                        car_border = rcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(car_border, q_border)) {
+                            openQuestionDialog(p1);
+                        }
+                        break;
+
+                    case 'ArrowDown':
+                        rcar.style.top = parseInt(rcar.style.top) + speed + 'px';
+                        rcar.style.transform = "rotate(180deg)";
+                        car_border = rcar.getBoundingClientRect();
+                        q_border = question.getBoundingClientRect();
+
+                        if (isColliding(car_border, q_border)) {
+                            openQuestionDialog(p1);
+                        }
+                        break;
+                }
+            }
+        });
+
+        function RandInt() {
             return Math.floor(Math.random() * 11);
         }
 
-        function RandX(){
-            return Math.floor(Math.random() * 1400)
+        // used for random position for question box
+        function RandX() {
+            const qWidth = question.getBoundingClientRect().width;
+            return Math.floor(Math.random() * (window.innerWidth - qWidth)); // subtracting width of question
         }
 
-        function RandY(){
-            return Math.floor(Math.random() * 650)
+        // used for random position for question box
+        function RandY() {
+            const bar = getBarHeight();
+            const qHeight = question.getBoundingClientRect().height;
+            return Math.floor(Math.random() * (window.innerHeight - bar)) + bar - qHeight; // subtracting height of bar
         }
 
-	function isColliding(car_border, q_border){
-	    if(!(car_border.left > q_border.right || car_border.right < q_border.left || car_border.bottom < q_border.top || car_border.top > q_border.bottom)){
-	        return true;
-	    } else {
-		return false;
-	    }
-	}
-	
-        function mathDialog(player){
-		let input = document.getElementById("answer");
-                box_open = true;
-		current_player = player;
-                math.textContent = RandInt() + "+" + RandInt();
-                prompt.textContent = player.name + ", answer the math problem!";
-                dialog.showModal();
-		if (current_player.name === "AI Player"){
-		    let num = Math.floor(Math.random() * 100);
-		    if (aiCorrectRate > num){ // ai is right
-			setTimeout(() =>{ input.value = eval(math.textContent);}, 500);
-		    } else {
-			setTimeout(() => { input.value = RandInt();}, 500);
-		    }
-	            setTimeout(() => { submit_button.click();}, 1500); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
-		}
+        function getBarHeight() {
+            return parseInt(
+                getComputedStyle(document.body)
+                    .getPropertyValue('--bar-height')
+            );
         }
 
+        function isColliding(car_border, q_border) {
+            if (!(car_border.left > q_border.right || car_border.right < q_border.left || car_border.bottom < q_border.top || car_border.top > q_border.bottom)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function startGame() {
+            startDialog.close();
+            startMainTimer();
+            moveAI();
+            hasGameStarted = true;
+            gameIsPaused = false;
+            playMusic();
+
+            p1.name = document.getElementById("p1-name-input").value || "Player 1";
+            p2.name = document.getElementById("p2-name-input").value || "Player 2";
+            ai_player.name = "QTrobot";
+
+            p1.scoreVar.textContent = p1.name + ": " + p1.scoreNum;
+            p2.scoreVar.textContent = p2.name + ": " + p2.scoreNum;
+            ai_player.scoreVar.textContent = ai_player.name + ": " + ai_player.scoreNum;
+        }
+
+        function pauseGame() {
+            gameIsPaused = true;
+            pauseDialog.showModal();
+        }
+
+        function resumeGame() {
+            gameIsPaused = false;
+            pauseDialog.close();
+        }
+
+        function showRulesDialog() {
+            gameIsPaused = true;
+            rulesDialog.showModal();
+        }
+
+        function closeRules() {
+            gameIsPaused = true;
+            rulesDialog.close();
+        }
+
+        function gameOver() {
+            gameIsPaused = true;
+
+            const tbody = document.getElementById("gameOverBody");
+            tbody.innerHTML = `
+                <tr><td>${p1.name}</td><td>${p1.scoreNum}</td></tr>
+                <tr><td>${p2.name}</td><td>${p2.scoreNum}</td></tr>
+                <tr><td>${ai_player.name}</td><td>${ai_player.scoreNum}</td></tr>
+            `;
+
+            gameOverDialog.showModal();
+            logScore(p1.name, p1.scoreNum);
+            logScore(p2.name, p2.scoreNum);
+            logScore(ai_player.name, ai_player.scoreNum);
+        }
+
+        function openQuestionDialog(player) {
+            let input = document.getElementById("answer");
+            questionDialogIsOpen = true;
+            current_player = player;
+            math.textContent = RandInt() + "+" + RandInt();
+            prompt.textContent = player.name + ", answer the math problem!";
+            questionDialog.showModal();
+            if (current_player.name === ai_player.name) {
+                let num = Math.floor(Math.random() * 100);
+                if (aiCorrectRate > num) { // ai is right
+                    setTimeout(() => { input.value = eval(math.textContent); }, 1000);
+                } else {
+                    setTimeout(() => { input.value = RandInt(); }, 1000);
+                }
+                setTimeout(() => { submit_button.click(); }, 2000); // this occurs simultaneously with prev timeout, so it has to be longer than the above one in order to 'stack'
+            }
+        }
+    </script>
+
+    <!-- log player score -->
+    <script>
+        async function logScore(player, score) {
+
+            const scoreData = {
+                score: score,
+                player: player
+            }
+
+            const response = await fetch("/myapp/log_player_score/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                body: JSON.stringify(scoreData)
+            });
+
+            const data = await response.json();
+        }
+
+        // CSRF token helper (required by Django for POST)
+        function getCookie(name) {
+            let cookieValue = null;
+            document.cookie.split(";").forEach(cookie => {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            });
+            return cookieValue;
+        }
+    </script>
+
+    <!-- correct/incorrect audio script -->
+    <script>
+        var musicPlayer = document.getElementById("music");
+        var correctPlayer = document.getElementById("correct1");
+        var wrongPlayer = document.getElementById("wrong1");
+
+        musicPlayer.volume = 0.4;
+        correctPlayer.volume = 1.0;
+        wrongPlayer.volume = 0.2;
+
+        function playMusic() {
+            musicPlayer.play();
+            console.log("music is playing");
+        }
+
+        function playCorrectAudio() {
+            correctPlayer.play();
+        }
+
+        function playWrongAudio() {
+            wrongPlayer.play();
+        }
     </script>
 
     <script src="{% static 'js/tts.js' %}"></script>
-    
+
     <!-- strip non-number input from answer input -->
     <script>
-	const answerInput = document.getElementById("answer");
+        const answerInput = document.getElementById("answer");
 
-	answerInput.addEventListener("input", () => {
-	    answerInput.value = input.value.replace(/[^0-9]/g, "");
-	});
+        answerInput.addEventListener("input", () => {
+            answerInput.value = answerInput.value.replace(/[^0-9]/g, "");
+        });
     </script>
-    
-  </body>
+
+</body>
 
 </html>

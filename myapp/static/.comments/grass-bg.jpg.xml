@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comment version="3.0">
+  <caption>Aerial scene of intersection</caption>
+  <note>Aerial scene of intersection illustration</note>
+  <place/>
+  <categories>
+    <category value="scene"/>
+    <category value="scenery"/>
+    <category value="landscape"/>
+    <category value="outdoor"/>
+    <category value="outside"/>
+    <category value="road"/>
+    <category value="street"/>
+    <category value="bush"/>
+    <category value="grass"/>
+    <category value="green"/>
+    <category value="lawn"/>
+    <category value="intersection"/>
+    <category value="junction"/>
+    <category value="lanes"/>
+    <category value="traffic"/>
+    <category value="view"/>
+    <category value="highway"/>
+    <category value="way"/>
+    <category value="path"/>
+    <category value="nature"/>
+    <category value="illustration"/>
+    <category value="graphic"/>
+    <category value="picture"/>
+    <category value="clipart"/>
+    <category value="clip-art"/>
+    <category value="clip"/>
+    <category value="art"/>
+    <category value="background"/>
+    <category value="drawing"/>
+    <category value="image"/>
+  </categories>
+</comment>
