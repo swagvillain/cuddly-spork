@@ -105,10 +105,19 @@
 		<div>
 			<span class="close">&times;</span>
 			<div class="modal-content">
-			<p>Race your car to collect ice cream and earn points!<br> If you answer questions correctly, you will get more points and win
-				the game. Player 1 uses WASD keys to control their car. Player 2 uses the arrow keys. <strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong> to move your car.
-				Reach the Ice Cream first for a chance to answer the question.</p>
-		</div></div>
+				<p>
+					<span style="color:red"> Player 1</span> uses the <span style="color:red"> arrow keys </span> to
+					control the <span style="color:red">
+						red car</span>.<br>
+					<span style="color: blue;">Player 2</span> uses the <span style="color: blue;">WASD keys </span> to
+					control the <span style="color:blue"> blue
+						car</span>.<br>
+					<span style="color: green;">QTrobot</span> controls the <span style="color:green"> green car</span>.<br>
+					<strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong> to move your car. Reach
+					the Ice Cream first for a chance to answer a math question. Answer correctly to get a point. Whoever has the most points after 1 minute wins!
+				</p>
+			</div>
+		</div>
 	</div>
 
 	<!-- Modal Script -->
@@ -123,7 +132,7 @@
 		});
 
 		btn.addEventListener('click', () => {
-			speak('Race your car as fast as you can. If you answer questions correctly, you will get more points and win the game. Player 1 uses WASD to steer. Player 2 uses the arrow keys. Tap your keys to move your car. Reach the Question Mark first for a chance to answer the question.');
+			speak('Player 1 uses the arrow keys to control the red car. Player 2 uses the WASD keys to control the blue car. I control the green car. Tap your keys rapidly to move your car. Reach the Ice Cream first for a chance to answer a math question. Answer correctly to get a point. Whoever has the most points after 1 minute wins!');
 		});
 
 		// Get the <span> element that closes the modal
@@ -138,6 +147,11 @@
 		span.onclick = function () {
 			modal.style.display = "none";
 		}
+
+		modal.onclick = function () {
+			modal.style.display = "none";
+		}
+
 
 		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function (event) {

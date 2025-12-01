@@ -79,7 +79,7 @@
                 </button>
                 <p id="main-countdown">60</p>
             </div>
-            
+
             <dialog id="dialog">
                 <center>
                     <div id="prompt"> Answer The Math Problem! </div>
@@ -98,8 +98,10 @@
                 <center>
                     <h1> Ready to play? </h1>
                     <p>What are your names?</p>
-                    <div class="score1">Player 1: <input id="p1-name-input" type="text" autocomplete="off" maxlength="12"></div>
-                    <div class="score2">Player 2: <input id="p2-name-input" type="text" autocomplete="off" maxlength="12"></div>
+                    <div class="score1">Player 1: <input id="p1-name-input" type="text" autocomplete="off"
+                            maxlength="12"></div>
+                    <div class="score2">Player 2: <input id="p2-name-input" type="text" autocomplete="off"
+                            maxlength="12"></div>
 
                     <p>Player 1 will use the arrow keys, and Player 2 will use WASD to move</p>
                     <button class="btn btn-primary" id="startGameBtn" onclick="startGame()"> Start game! </button>
@@ -110,12 +112,12 @@
             <dialog id="pauseDialog">
                 <center>
                     <H1 style="color:green"> Game is paused </H1>
-                    <button class="btn btn-primary" id="goMainMenu" onclick="window.location.href='{% url 'mainmenu' %}';">
+                    <button class="btn btn-primary" id="goMainMenu"
+                        onclick="window.location.href='{% url 'mainmenu' %}';">
                         Quit to main menu </button>
-                    <button class="btn btn-primary">See Rules/tutorial (not implemented)</button>
+                    <button class="btn btn-primary" id="rulesButton" onclick="showRulesDialog()">How to Play</button>
                     <button class="btn btn-primary" id="resumeGame" onclick="resumeGame()"> Resume game </button>
                 </center>
-
             </dialog>
 
             <dialog id="gameOver">
@@ -132,12 +134,41 @@
                         <tbody id="gameOverBody">
                         </tbody>
                     </table>
-                    <button class="btn btn-primary" id="goMainMenu" onclick="window.location.href='{% url 'mainmenu' %}';">
+                    <button class="btn btn-primary" id="goMainMenu"
+                        onclick="window.location.href='{% url 'mainmenu' %}';">
                         Quit to main menu </button>
                 </center>
             </dialog>
 
-        </main> 
+            <dialog id="rulesDialog">
+                <center>
+                    <div>
+                        <div>
+                            <p>
+                                <span style="color:red"> Player 1</span> uses the <span style="color:red"> arrow keys
+                                </span> to
+                                control the <span style="color:red">
+                                    red car</span>.<br>
+                                <span style="color: blue;">Player 2</span> uses the <span style="color: blue;">WASD keys
+                                </span> to
+                                control the <span style="color:blue"> blue
+                                    car</span>.<br>
+                                <span style="color: green;">QTrobot</span> controls the <span style="color:green"> green
+                                    car</span>.<br>
+                                <strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong> to move your
+                                car.
+                                Reach
+                                the Ice Cream first for a chance to answer a math question. Answer correctly to get a
+                                point.
+                                Whoever has the most points after 1 minute wins!
+                            </p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="closeRules()">Close Rules</button>
+                </center>
+            </dialog>
+
+        </main>
 
         <!-- cars and questionbox -->
         <div class="question_icon"> <img id=question width=50 src="{% static 'ice-cream.png' %}"> </img> </div>
@@ -171,6 +202,45 @@
                 }
             }, 1000);
         }
+    </script>
+
+    <!-- modal/rules script  -->
+    <script>
+        // var modal = document.getElementById("rulesDialog");
+
+        // // Get the button that opens the modal
+        // var btn = document.getElementById("rulesButton");
+        // btn.addEventListener('mouseover', () => {
+        //     speak('Do you know how to play?');
+        // });
+
+        // btn.addEventListener('click', () => {
+        //     speak('Player 1 uses the arrow keys to control the red car. Player 2 uses the WASD keys to control the blue car. I control the green car. Tap your keys rapidly to move your car. Reach the Ice Cream first for a chance to answer a math question. Answer correctly to get a point. Whoever has the most points after 1 minute wins!');
+        // });
+
+        // // Get the <span> element that closes the modal
+        // var span = document.getElementsByClassName("close")[0];
+
+        // // When the user clicks the button, open the modal
+        // btn.addEventListener('click', () => {
+        //     modal.style.display = "block";
+        // });
+
+        // // When the user clicks on <span> (x), close the modal
+        // span.onclick = function () {
+        //     modal.style.display = "none";
+        // }
+
+        // modal.onclick = function () {
+        //     modal.style.display = "none";
+        // }
+
+        // // When the user clicks anywhere outside of the modal, close it
+        // window.onclick = function (event) {
+        //     if (event.target == modal) {
+        //         modal.style.display = "none";
+        //     }
+        // }
     </script>
 
     <!-- Everything Script-->
@@ -222,7 +292,8 @@
         let pauseDialog = document.getElementById("pauseDialog");
         let startDialog = document.getElementById("startDialog");
         let questionDialog = document.getElementById("dialog");
-        let gameOverDialog = document.getElementById("gameOver")
+        let gameOverDialog = document.getElementById("gameOver");
+        let rulesDialog = document.getElementById("rulesDialog");
 
         let questionDialogIsOpen = false;
 
@@ -232,23 +303,23 @@
         // initial locations of cars, q-box upon load
         window.addEventListener('load', () => {
             rcar.style.position = 'absolute';
-            rcar.style.left = wWidth/2 - 250 + 'px';
-            rcar.style.top = wHeight/2 + 150 + 'px';
+            rcar.style.left = wWidth / 2 - 250 + 'px';
+            rcar.style.top = wHeight / 2 + 150 + 'px';
             rcar.style.transform = 'rotate(90deg)';
 
             gcar.style.position = 'absolute';
-            gcar.style.left = wWidth/2 - 250 + 'px';
-            gcar.style.top = wHeight/2 - 150 + 'px';
+            gcar.style.left = wWidth / 2 - 250 + 'px';
+            gcar.style.top = wHeight / 2 - 150 + 'px';
             gcar.style.transform = 'rotate(90deg)';
 
             bcar.style.position = 'absolute';
-            bcar.style.left = wWidth/2 + 260 + 'px';
-            bcar.style.top = wHeight/2 + 150 + 'px';
+            bcar.style.left = wWidth / 2 + 260 + 'px';
+            bcar.style.top = wHeight / 2 + 150 + 'px';
             bcar.style.transform = 'rotate(270deg)';
 
             question.style.position = 'absolute';
-            question.style.top = wHeight/2 + 'px';
-            question.style.left = wWidth/2 + 'px';
+            question.style.top = wHeight / 2 + 'px';
+            question.style.left = wWidth / 2 + 'px';
             question.style.padding = 0;
             question.style.border = 0;
             question.style.margin = 0;
@@ -266,7 +337,7 @@
         // listener for enter key to submit answer
         window.addEventListener('keyup', (e) => {
             if (e.key == 'Escape') {
-                if(!gameIsPaused){
+                if (!gameIsPaused) {
                     pauseGame();
                 } else {
                     resumeGame();
@@ -506,13 +577,13 @@
         function RandY() {
             const bar = getBarHeight();
             const qHeight = question.getBoundingClientRect().height;
-            return Math.floor(Math.random() * (window.innerHeight-bar)) + bar - qHeight; // subtracting height of bar
+            return Math.floor(Math.random() * (window.innerHeight - bar)) + bar - qHeight; // subtracting height of bar
         }
 
         function getBarHeight() {
             return parseInt(
                 getComputedStyle(document.body)
-                .getPropertyValue('--bar-height')
+                    .getPropertyValue('--bar-height')
             );
         }
 
@@ -549,6 +620,16 @@
         function resumeGame() {
             gameIsPaused = false;
             pauseDialog.close();
+        }
+
+        function showRulesDialog() {
+            gameIsPaused = true;
+            rulesDialog.showModal();
+        }
+
+        function closeRules() {
+            gameIsPaused = true;
+            rulesDialog.close();
         }
 
         function gameOver() {
@@ -625,10 +706,10 @@
         var musicPlayer = document.getElementById("music");
         var correctPlayer = document.getElementById("correct1");
         var wrongPlayer = document.getElementById("wrong1");
-        
+
         musicPlayer.volume = 0.4;
         correctPlayer.volume = 1.0;
-        wrongPlayer.volume = 0.2    ;
+        wrongPlayer.volume = 0.2;
 
         function playMusic() {
             musicPlayer.play();

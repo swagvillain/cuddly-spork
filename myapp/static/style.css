@@ -133,7 +133,7 @@ button.btn:focus {
   background: linear-gradient(135deg, #ff4e50, #f9d423);
   color: #fff;
   font-family: 'Comic Neue', cursive;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
   width: 400px;
