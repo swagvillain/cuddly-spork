@@ -142,28 +142,53 @@
 
             <dialog id="rulesDialog">
                 <center>
-                    <div>
-                        <div>
-                            <p>
-                                <span style="color:red"> Player 1</span> uses the <span style="color:red"> arrow keys
-                                </span> to
-                                control the <span style="color:red">
-                                    red car</span>.<br>
-                                <span style="color: blue;">Player 2</span> uses the <span style="color: blue;">WASD keys
-                                </span> to
-                                control the <span style="color:blue"> blue
-                                    car</span>.<br>
-                                <span style="color: green;">QTrobot</span> controls the <span style="color:green"> green
-                                    car</span>.<br>
-                                <strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong> to move your
-                                car.
-                                Reach
-                                the Ice Cream first for a chance to answer a math question. Answer correctly to get a
-                                point.
-                                Whoever has the most points after 1 minute wins!
-                            </p>
+                    <div class="slideshow-container">
+
+                        <div class="mySlides">
+                            <div class="numbertext">1 / 3</div>
+                            <img src="{% static 'RedCar.png' %}" style="height: 170px">
+                            <img src="{% static 'BlueCar.png' %}" style="height: 170px;">
+                            <img src="{% static 'GreenCar.png' %}" style="height: 170px;"><br>
+                            <span style="color:red"> Player 1</span> uses the <span style="color:red"> arrow keys
+                            </span> to
+                            control the <span style="color:red">
+                                red car</span>.<br>
+                            <span style="color: blue;">Player 2</span> uses the <span style="color: blue;">WASD keys
+                            </span> to
+                            control the <span style="color:blue"> blue
+                                car</span>.<br>
+                            <span style="color: green;">QTrobot</span> controls the <span style="color:green"> green
+                                car</span>.
                         </div>
+
+                        <div class="mySlides">
+                            <div class="numbertext">2 / 3</div>
+                            <img src="{% static 'ice-cream.png' %}" style="height:200px"><br>
+                            <span><strong><em>Tap</em></strong> your keys <strong><em>rapidly</em></strong>
+                                to move your car. Reach the Ice Cream first for a chance to answer a math question.
+                                Answer correctly to get a
+                                point.</span>
+                        </div>
+
+                        <div class="mySlides">
+                            <div class="numbertext">3 / 3</div>
+                            <img src="{% static 'crown.png' %}" style="height:200px"><br>
+                            <p>Whoever has the most points after 1 minute wins!</p>
+                        </div>
+
+                        <a class="prev" onclick="plusSlides(-1)">❮</a>
+                        <a class="next" onclick="plusSlides(1)">❯</a>
+
                     </div>
+
+
+                    <div style="text-align:center">
+                        <span class="dot" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                        <span class="dot" onclick="currentSlide(3)"></span>
+                    </div>
+
+
                     <button class="btn btn-primary" onclick="closeRules()">Close Rules</button>
                 </center>
             </dialog>
@@ -180,6 +205,36 @@
         <audio id="wrong1" src="{% static 'wrong2.mp3' %}"></audio>
         <audio id="music" loop="true" src="{% static 'music1.mp3' %}"></audio>
     </div>
+
+    <!-- slideshow script -->
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+    </script>
 
     <!-- Timer Script -->
     <script>
